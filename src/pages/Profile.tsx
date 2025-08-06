@@ -2,71 +2,101 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
-  User, 
   Edit, 
   Phone, 
   MapPin, 
+  Calendar,
   Globe,
+  Activity,
+  Droplets,
+  TrendingUp,
+  ShoppingBag,
+  Plus,
+  Share,
+  MessageCircle,
+  Settings,
   Bell,
-  Shield,
-  Heart,
-  HelpCircle,
-  LogOut,
-  ChevronRight,
-  Camera,
-  Star,
-  Trophy,
-  Leaf,
-  Settings
+  WifiOff,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Profile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
-    name: 'Ramesh Kumar',
+    name: 'Ramu Ji',
     phone: '+91 98765 43210',
-    location: 'Village Rampur, Dist. Hardoi, UP',
-    pincode: '241001',
-    language: 'Hindi',
-    joinDate: '2023-06-15',
+    birthDate: '15 March 1985',
+    location: 'Hyderabad',
+    state: 'Telangana',
+    pincode: '500001',
+    language: 'English',
     avatar: null
   });
 
-  const stats = [
-    { label: 'Orders Placed', value: '24', icon: Trophy, color: 'text-agri-warning' },
-    { label: 'Plants Diagnosed', value: '18', icon: Leaf, color: 'text-agri-success' },
-    { label: 'Treatments Success', value: '94%', icon: Star, color: 'text-agri-info' }
+  const [notifications, setNotifications] = useState(true);
+  const [offlineMode, setOfflineMode] = useState(false);
+
+  const farmingStats = [
+    { 
+      icon: Activity, 
+      value: '12', 
+      label: 'Disease Scans',
+      subtitle: 'scans this month',
+      color: 'bg-green-500',
+      bgColor: 'bg-green-50',
+      progress: 70
+    },
+    { 
+      icon: Droplets, 
+      value: '3', 
+      label: 'Active Treatments',
+      subtitle: 'crops under treatment',
+      color: 'bg-blue-500',
+      bgColor: 'bg-blue-50',
+      progress: 50
+    },
+    { 
+      icon: TrendingUp, 
+      value: '₹12,450', 
+      label: 'Total Revenue',
+      subtitle: 'earned this month',
+      color: 'bg-green-500',
+      bgColor: 'bg-green-50',
+      progress: 85
+    },
+    { 
+      icon: ShoppingBag, 
+      value: '2', 
+      label: 'Orders',
+      subtitle: 'Pending delivery',
+      color: 'bg-purple-500',
+      bgColor: 'bg-purple-50',
+      progress: 40
+    }
   ];
 
-  const menuSections = [
+  const produceListings = [
     {
-      title: 'Account',
-      items: [
-        { icon: Edit, label: 'Edit Profile', action: () => navigate('/profile/edit') },
-        { icon: Phone, label: 'Change Phone Number', action: () => navigate('/profile/phone') },
-        { icon: MapPin, label: 'Manage Addresses', action: () => navigate('/profile/addresses') },
-        { icon: Globe, label: 'Language Settings', action: () => navigate('/profile/language') }
-      ]
+      id: 1,
+      name: 'Fresh Tomatoes',
+      status: 'Live',
+      quantity: '40kg',
+      pricePerKg: '₹20/kg',
+      totalPrice: '₹800',
+      inquiries: 5,
+      statusColor: 'bg-green-100 text-green-800'
     },
     {
-      title: 'Preferences',
-      items: [
-        { icon: Bell, label: 'Notifications', action: () => navigate('/profile/notifications') },
-        { icon: Shield, label: 'Privacy & Security', action: () => navigate('/profile/privacy') },
-        { icon: Heart, label: 'Wishlist', action: () => navigate('/profile/wishlist') },
-        { icon: Settings, label: 'App Settings', action: () => navigate('/profile/settings') }
-      ]
-    },
-    {
-      title: 'Support',
-      items: [
-        { icon: HelpCircle, label: 'Help & FAQ', action: () => navigate('/help') },
-        { icon: Phone, label: 'Contact Support', action: () => {} },
-        { icon: Star, label: 'Rate App', action: () => {} }
-      ]
+      id: 2,
+      name: 'Organic Potatoes',
+      status: 'Sold',
+      quantity: '25kg',
+      pricePerKg: '₹15/kg',
+      totalPrice: '₹375',
+      inquiries: 3,
+      statusColor: 'bg-gray-100 text-gray-800'
     }
   ];
 
@@ -76,152 +106,204 @@ const Profile = () => {
   };
 
   return (
-    <div className="mobile-container bg-agri-light-gray">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="mobile-header">
+      <div className="flex items-center justify-between p-4">
         <div className="flex items-center space-x-3">
-          <button onClick={() => navigate('/home')}>
-            <ArrowLeft className="w-6 h-6 text-agri-gray" />
+          <button 
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <h1 className="text-xl font-bold text-text-secondary">Profile</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
         </div>
-        
-        <button onClick={() => navigate('/profile/edit')}>
-          <Edit className="w-6 h-6 text-agri-gray" />
-        </button>
       </div>
 
-      {/* Content */}
-      <div className="mobile-content space-y-6 pt-4">
-        {/* Profile Header */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="relative">
-              <Avatar className="w-16 h-16">
-                <AvatarImage src={userData.avatar || ''} />
-                <AvatarFallback className="bg-agri-primary text-white text-xl font-bold">
-                  {userData.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-agri-primary rounded-full flex items-center justify-center shadow-md">
-                <Camera className="w-3 h-3 text-white" />
-              </button>
-            </div>
-            
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-text-secondary">{userData.name}</h2>
-              <p className="text-agri-gray">{userData.phone}</p>
-              <div className="flex items-center space-x-2 mt-1">
-                <MapPin className="w-4 h-4 text-agri-gray" />
-                <p className="text-sm text-agri-gray">{userData.location}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Farmer Badge */}
-          <div className="flex items-center justify-between p-3 bg-agri-light rounded-xl">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-agri-primary rounded-xl flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-white" />
+      <div className="px-4 space-y-6">
+        {/* Profile Header Card */}
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl p-6 text-white relative overflow-hidden">
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                RJ
               </div>
               <div>
-                <p className="font-semibold text-text-secondary">Smart Farmer</p>
-                <p className="text-sm text-agri-gray">Member since {new Date(userData.joinDate).getFullYear()}</p>
+                <h2 className="text-2xl font-bold">{userData.name}</h2>
+                <div className="flex items-center space-x-2 mt-1">
+                  <Phone className="w-4 h-4" />
+                  <span className="text-green-100">{userData.phone}</span>
+                </div>
               </div>
             </div>
-            <Badge className="bg-agri-warning text-white">Premium</Badge>
+            <Button 
+              onClick={() => navigate('/profile/edit')}
+              className="bg-green-400 hover:bg-green-300 text-green-800 border-0"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Profile
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-6 text-sm">
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4" />
+              <span>{userData.birthDate}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" />
+              <span>{userData.pincode}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" />
+              <span>{userData.location}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" />
+              <span>{userData.state}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Globe className="w-4 h-4" />
+              <span>{userData.language}</span>
+            </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-4">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl p-4 text-center shadow-soft">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-2 ${
-                stat.color === 'text-agri-warning' ? 'bg-yellow-100' :
-                stat.color === 'text-agri-success' ? 'bg-green-100' : 'bg-blue-100'
-              }`}>
-                <stat.icon className={`w-4 h-4 ${stat.color}`} />
-              </div>
-              <p className="text-lg font-bold text-text-secondary">{stat.value}</p>
-              <p className="text-xs text-agri-gray">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Menu Sections */}
-        {menuSections.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="bg-white rounded-2xl shadow-soft overflow-hidden">
-            <div className="px-6 py-4 border-b border-agri-light-gray">
-              <h3 className="font-semibold text-text-secondary">{section.title}</h3>
-            </div>
-            
-            <div className="divide-y divide-agri-light-gray">
-              {section.items.map((item, itemIndex) => (
-                <button
-                  key={itemIndex}
-                  onClick={item.action}
-                  className="w-full flex items-center justify-between p-4 hover:bg-agri-light transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <item.icon className="w-5 h-5 text-agri-gray" />
-                    <span className="font-medium text-text-secondary">{item.label}</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-agri-gray" />
-                </button>
-              ))}
-            </div>
+        {/* Farming Summary */}
+        <div>
+          <div className="flex items-center space-x-2 mb-4">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+            <h3 className="text-xl font-bold text-gray-900">Farming Summary</h3>
           </div>
-        ))}
-
-        {/* Quick Actions */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft">
-          <h3 className="font-semibold text-text-secondary mb-4">Quick Actions</h3>
+          
           <div className="grid grid-cols-2 gap-4">
-            <button 
-              onClick={() => navigate('/diagnose')}
-              className="flex flex-col items-center p-4 bg-agri-light rounded-xl hover:bg-agri-light-gray transition-colors"
-            >
-              <div className="w-12 h-12 bg-agri-primary rounded-xl flex items-center justify-center mb-2">
-                <Camera className="w-6 h-6 text-white" />
+            {farmingStats.map((stat, index) => (
+              <div key={index} className="bg-white rounded-2xl p-6 shadow-sm">
+                <div className={`w-12 h-12 ${stat.bgColor} rounded-2xl flex items-center justify-center mb-4`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color.replace('bg-', 'text-')}`} />
+                </div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                <div className="text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
+                <div className="text-sm text-gray-500 mb-3">{stat.subtitle}</div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className={`h-2 rounded-full ${stat.color}`}
+                    style={{ width: `${stat.progress}%` }}
+                  ></div>
+                </div>
               </div>
-              <span className="text-sm font-medium text-text-secondary">Diagnose Plant</span>
-            </button>
-            
-            <button 
-              onClick={() => navigate('/shop')}
-              className="flex flex-col items-center p-4 bg-agri-light rounded-xl hover:bg-agri-light-gray transition-colors"
-            >
-              <div className="w-12 h-12 bg-agri-info rounded-xl flex items-center justify-center mb-2">
-                <Trophy className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-sm font-medium text-text-secondary">Shop Products</span>
-            </button>
+            ))}
           </div>
         </div>
 
-        {/* App Info */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-agri-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Leaf className="w-8 h-8 text-white" />
+        {/* Your Produce for Sale */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <ShoppingBag className="w-5 h-5 text-orange-600" />
+              <h3 className="text-xl font-bold text-gray-900">Your Produce for Sale</h3>
             </div>
-            <h3 className="text-lg font-bold text-text-secondary mb-2">KisanMitra</h3>
-            <p className="text-agri-gray text-sm mb-4">Your Smart Farming Companion</p>
-            <p className="text-xs text-agri-gray">Version 1.0.0</p>
+            <Button 
+              onClick={() => navigate('/sell-produce')}
+              className="bg-green-600 hover:bg-green-700 text-white rounded-xl"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add New
+            </Button>
+          </div>
+
+          <div className="space-y-4">
+            {produceListings.map((produce) => (
+              <div key={produce.id} className="border-b border-gray-100 last:border-b-0 pb-4 last:pb-0">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3">
+                    <h4 className="text-lg font-semibold text-gray-900">{produce.name}</h4>
+                    <Badge className={produce.statusColor}>
+                      {produce.status}
+                    </Badge>
+                  </div>
+                  <button className="text-gray-400 hover:text-gray-600">
+                    <Share className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="flex items-center space-x-6 text-sm text-gray-600">
+                  <span>{produce.quantity}</span>
+                  <span>{produce.pricePerKg}</span>
+                  <span className="text-green-600 font-semibold">{produce.totalPrice}</span>
+                </div>
+                
+                <div className="flex items-center space-x-2 mt-2">
+                  <MessageCircle className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm text-blue-500">{produce.inquiries} inquiries</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="w-full bg-white rounded-2xl p-4 shadow-soft flex items-center justify-center space-x-3 hover:bg-red-50 transition-colors group"
-        >
-          <LogOut className="w-5 h-5 text-agri-danger group-hover:text-red-600" />
-          <span className="font-medium text-agri-danger group-hover:text-red-600">Logout</span>
-        </button>
+        {/* Settings & Support */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center space-x-2 mb-6">
+            <Settings className="w-5 h-5 text-gray-600" />
+            <h3 className="text-xl font-bold text-gray-900">Settings & Support</h3>
+          </div>
 
-        {/* Bottom Spacing */}
+          <div className="space-y-4">
+            <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-colors">
+              <div className="flex items-center space-x-3">
+                <MessageCircle className="w-5 h-5 text-gray-600" />
+                <span className="font-medium text-gray-900">Contact Support</span>
+              </div>
+            </button>
+
+            <div className="flex items-center justify-between p-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Notifications</div>
+                  <div className="text-sm text-gray-500">Receive alerts and updates</div>
+                </div>
+              </div>
+              <div className={`w-12 h-6 rounded-full ${notifications ? 'bg-green-500' : 'bg-gray-300'} relative transition-colors`}>
+                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${notifications ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
+                <span className={`text-xs font-bold absolute inset-0 flex items-center justify-center text-white ${notifications ? 'pl-1' : 'pr-1'}`}>
+                  {notifications ? 'On' : 'Off'}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                  <WifiOff className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Offline Mode</div>
+                  <div className="text-sm text-gray-500">Work without internet connection</div>
+                </div>
+              </div>
+              <span className="text-gray-500 font-medium">Off</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Logout */}
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center space-x-3 p-4 hover:bg-red-50 rounded-xl transition-colors"
+          >
+            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+              <LogOut className="w-5 h-5 text-red-600" />
+            </div>
+            <span className="font-medium text-red-600">Logout</span>
+          </button>
+        </div>
+
+        {/* Bottom spacing */}
         <div className="h-8"></div>
       </div>
     </div>
