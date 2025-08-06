@@ -16,6 +16,9 @@ import Treatments from "./pages/Treatments";
 import Guides from "./pages/Guides";
 import NearbyShops from "./pages/NearbyShops";
 import SellProduce from "./pages/SellProduce";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +44,9 @@ const App = () => (
           <Route path="/shops" element={<NearbyShops />} />
           <Route path="/sell" element={<SellProduce />} />
           <Route path="/sell/new" element={<SellProduce />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

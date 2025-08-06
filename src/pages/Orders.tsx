@@ -21,7 +21,13 @@ const Orders = () => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState('all');
 
-  const orders = [
+  // Get orders from localStorage (in real app, this would be from API)
+  const getStoredOrders = () => {
+    const stored = localStorage.getItem('farmer_orders');
+    return stored ? JSON.parse(stored) : [];
+  };
+
+  const defaultOrders = [
     {
       id: 'ORD001',
       status: 'delivered',
@@ -48,22 +54,13 @@ const Orders = () => {
       address: 'Village Rampur, Dist. Hardoi, UP',
       trackingId: 'KM12346',
       paymentMethod: 'COD'
-    },
-    {
-      id: 'ORD003',
-      status: 'processing',
-      items: [
-        { name: 'Premium Garden Spade', quantity: 1, price: 350 },
-        { name: 'Plant Growth Booster', quantity: 2, price: 89 }
-      ],
-      total: 528,
-      orderDate: '2024-01-21',
-      estimatedDelivery: '2024-01-25',
-      address: 'Village Rampur, Dist. Hardoi, UP',
-      trackingId: 'KM12347',
-      paymentMethod: 'UPI'
     }
   ];
+
+  const [orders, setOrders] = useState(() => {
+    const storedOrders = getStoredOrders();
+    return storedOrders.length > 0 ? storedOrders : defaultOrders;
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

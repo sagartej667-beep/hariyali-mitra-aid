@@ -306,7 +306,16 @@ const Shop = () => {
       {getTotalItems() > 0 && (
         <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-4">
           <Button 
-            onClick={() => navigate('/cart')}
+            onClick={() => {
+              // Store cart items in localStorage for the cart page
+              localStorage.setItem('cart_items', JSON.stringify(
+                Object.entries(cartItems).map(([id, quantity]) => {
+                  const product = products.find(p => p.id === id);
+                  return { ...product, quantity };
+                }).filter(item => item.quantity > 0)
+              ));
+              navigate('/cart');
+            }}
             className="w-full bg-agri-primary hover:bg-agri-secondary text-white py-4 rounded-xl shadow-large flex items-center justify-between"
           >
             <span className="flex items-center space-x-2">
