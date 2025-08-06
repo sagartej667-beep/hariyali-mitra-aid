@@ -9,6 +9,9 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Diagnose from "./pages/Diagnose";
+import CameraCapture from "./pages/CameraCapture";
+import AnalyzePlant from "./pages/AnalyzePlant";
+import DiagnoseResults from "./pages/DiagnoseResults";
 import Shop from "./pages/Shop";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
@@ -36,6 +39,9 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/diagnose" element={<Diagnose />} />
+          <Route path="/diagnose/capture" element={<CameraCapture />} />
+          <Route path="/diagnose/analyze" element={<AnalyzePlant />} />
+          <Route path="/diagnose/results" element={<DiagnoseResults />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/profile" element={<Profile />} />

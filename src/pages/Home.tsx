@@ -126,15 +126,14 @@ const Home = () => {
               <SelectItem value="HI">🇮🇳 HI</SelectItem>
               <SelectItem value="TA">🇮🇳 TA</SelectItem>
               <SelectItem value="TE">🇮🇳 TE</SelectItem>
-              <SelectItem value="BN">🇮🇳 BN</SelectItem>
-              <SelectItem value="MR">🇮🇳 MR</SelectItem>
+              <SelectItem value="KN">🇮🇳 KN</SelectItem>
             </SelectContent>
           </Select>
           
           <div className="relative">
             <Bell className="w-6 h-6 text-agri-gray" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-agri-danger rounded-full flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-white rounded-full" />
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-agri-danger rounded-full flex items-center justify-center animate-pulse">
+              <span className="text-xs font-bold text-white">3</span>
             </div>
           </div>
         </div>
@@ -150,39 +149,34 @@ const Home = () => {
                 <Cloud className="w-7 h-7 text-blue-600" />
               </div>
               <div>
-                <div className="text-3xl font-bold text-blue-900">28°C • <span className="text-2xl">Partly Cloudy</span></div>
-                <div className="flex items-center space-x-2 mt-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-blue-700">Perfect for field work</span>
+                <div className="text-3xl font-bold text-blue-900">28°C</div>
+                <div className="text-lg text-blue-800 mb-2">Partly Cloudy</div>
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <Sun className="w-4 h-4 text-yellow-600" />
+                    <span className="text-sm text-blue-700">High: 32°C | Low: 24°C</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Cloud className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm text-blue-700">Rainfall: 15% chance</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-blue-400 border-blue-400 text-white hover:bg-blue-500 font-medium"
-            >
-              View Details
-            </Button>
           </div>
         </div>
 
         {/* Daily Farming Tip */}
         <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl p-4 border-l-4 border-yellow-400">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-amber-900 text-lg mb-1">Today's Farming Tip</h3>
-                <p className="text-amber-800 text-sm leading-relaxed">
-                  Early morning (6-8 AM) is optimal for pesticide application - calm winds and cooler temperatures reduce drift and improve effectiveness.
-                </p>
-              </div>
+          <div className="flex items-start space-x-3">
+            <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+              <Lightbulb className="w-6 h-6 text-yellow-600" />
             </div>
-            <div className="bg-blue-500 text-white px-3 py-1 rounded-full">
-              <span className="text-xs font-medium">Admin Managed</span>
+            <div className="flex-1">
+              <h3 className="font-bold text-amber-900 text-lg mb-1">Today's Farming Tip</h3>
+              <p className="text-amber-800 text-sm leading-relaxed">
+                Early morning (6-8 AM) is optimal for pesticide application - calm winds and cooler temperatures reduce drift and improve effectiveness.
+              </p>
             </div>
           </div>
         </div>

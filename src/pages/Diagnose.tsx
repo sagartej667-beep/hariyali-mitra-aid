@@ -26,23 +26,8 @@ const Diagnose = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
-  // Simulate image selection
   const handleImageUpload = (source: 'camera' | 'gallery') => {
-    // In a real app, this would open camera or gallery
-    setSelectedImage('/api/placeholder/300/200');
-    setCurrentStep('analyzing');
-    
-    // Simulate AI analysis
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 20;
-      setAnalysisProgress(Math.min(progress, 100));
-      
-      if (progress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => setCurrentStep('results'), 500);
-      }
-    }, 300);
+    navigate('/diagnose/capture');
   };
 
   const renderInitialScreen = () => (
