@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Bell, 
@@ -27,22 +27,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const Home = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
-  const [showFloatingDiagnose, setShowFloatingDiagnose] = useState(false);
   
   // Get user data
   const userData = JSON.parse(localStorage.getItem('kisanmitra_user') || '{}');
   const userName = userData.name || 'Farmer';
-  
-  // Handle scroll to show/hide floating diagnosis button
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      setShowFloatingDiagnose(scrollTop > 300);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
   
   // Get time-based greeting
   const getGreeting = () => {
@@ -292,18 +280,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Floating Diagnosis Button */}
-      {showFloatingDiagnose && (
-        <button
-          onClick={() => navigate('/diagnose')}
-          className="fixed bottom-20 right-4 z-50 bg-agri-primary text-white rounded-full p-4 shadow-lg transform transition-all duration-300 hover:scale-110 active:scale-95"
-        >
-          <div className="flex items-center space-x-2">
-            <Camera className="w-6 h-6" />
-            <span className="font-medium">Start Diagnosis</span>
-          </div>
-        </button>
-      )}
 
       {/* Bottom Navigation */}
       <div className="mobile-bottom-nav">
