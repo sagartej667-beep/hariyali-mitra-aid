@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Bell, 
@@ -27,10 +27,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const Home = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
+  const [showFloatingDiagnose, setShowFloatingDiagnose] = useState(false);
   
   // Get user data
   const userData = JSON.parse(localStorage.getItem('kisanmitra_user') || '{}');
   const userName = userData.name || 'Farmer';
+  
+  // Handle scroll to show/hide floating diagnosis button
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setShowFloatingDiagnose(scrollTop > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   // Get time-based greeting
   const getGreeting = () => {
@@ -280,6 +292,19 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Floating Diagnosis Button */}
+      {showFloatingDiagnose && (
+        <button
+          onClick={() => navigate('/diagnose')}
+          className="fixed bottom-20 right-4 z-50 bg-agri-primary text-white rounded-full p-4 shadow-lg transform transition-all duration-300 hover:scale-110 active:scale-95"
+        >
+          <div className="flex items-center space-x-2">
+            <Camera className="w-6 h-6" />
+            <span className="font-medium">Start Diagnosis</span>
+          </div>
+        </button>
+      )}
+
       {/* Bottom Navigation */}
       <div className="mobile-bottom-nav">
         <div className="flex items-center justify-around py-3">
@@ -290,15 +315,18 @@ const Home = () => {
           
           <button 
             onClick={() => navigate('/diagnose')}
-            className="flex flex-col items-center space-y-1 px-3 py-2"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
           >
-            <Camera className="w-6 h-6 text-agri-gray" />
+            <div className="relative">
+              <Camera className="w-6 h-6 text-agri-gray" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-agri-primary rounded-full animate-pulse"></div>
+            </div>
             <span className="text-xs text-agri-gray">Diagnose</span>
           </button>
           
           <button 
             onClick={() => navigate('/shop')}
-            className="flex flex-col items-center space-y-1 px-3 py-2"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
           >
             <Store className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Shop</span>
@@ -306,7 +334,7 @@ const Home = () => {
           
           <button 
             onClick={() => navigate('/orders')}
-            className="flex flex-col items-center space-y-1 px-3 py-2"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
           >
             <Package className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Orders</span>
@@ -314,7 +342,7 @@ const Home = () => {
           
           <button 
             onClick={() => navigate('/profile')}
-            className="flex flex-col items-center space-y-1 px-3 py-2"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
           >
             <User className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Profile</span>
