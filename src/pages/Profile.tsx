@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -17,13 +18,19 @@ import {
   Settings,
   Bell,
   WifiOff,
-  LogOut
+  LogOut,
+  Mail,
+  Clock,
+  HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [userData, setUserData] = useState({
     name: 'Farmer',
     phone: '+91 98765 43210',
@@ -117,7 +124,27 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('kisanmitra_user');
-    navigate('/login');
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of your account.",
+    });
+    navigate('/');
+  };
+
+  const handleNotificationToggle = (checked: boolean) => {
+    setNotifications(checked);
+    toast({
+      title: checked ? "Notifications enabled" : "Notifications disabled",
+      description: checked ? "You will receive alerts and updates" : "You won't receive any notifications",
+    });
+  };
+
+  const handleOfflineModeToggle = (checked: boolean) => {
+    setOfflineMode(checked);
+    toast({
+      title: checked ? "Offline mode enabled" : "Offline mode disabled",
+      description: checked ? "App will work without internet connection" : "Internet connection required",
+    });
   };
 
   return (
@@ -141,7 +168,7 @@ const Profile = () => {
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                RJ
+                {userData.name.charAt(0).toUpperCase()}
               </div>
               <div>
                 <h2 className="text-2xl font-bold">{userData.name}</h2>
@@ -219,7 +246,7 @@ const Profile = () => {
               <h3 className="text-xl font-bold text-gray-900">Your Produce for Sale</h3>
             </div>
             <Button 
-              onClick={() => navigate('/sell-produce')}
+              onClick={() => navigate('/sell')}
               className="bg-green-600 hover:bg-green-700 text-white rounded-xl"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -265,14 +292,41 @@ const Profile = () => {
           </div>
 
           <div className="space-y-4">
-            <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-colors">
-              <div className="flex items-center space-x-3">
-                <MessageCircle className="w-5 h-5 text-gray-600" />
-                <span className="font-medium text-gray-900">Contact Support</span>
+            {/* Contact Support */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+              <div className="flex items-start space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-blue-900 mb-2">Contact Support</h4>
+                  <div className="space-y-2 text-sm text-blue-700">
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4" />
+                      <span>24/7 Helpline: 1800-123-4567</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Mail className="w-4 h-4" />
+                      <span>support@kisanmitra.com</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Clock className="w-4 h-4" />
+                      <span>Response time: Within 2 hours</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <HelpCircle className="w-4 h-4" />
+                      <span>FAQ & Video tutorials available</span>
+                    </div>
+                  </div>
+                  <Button size="sm" className="mt-3 bg-blue-600 hover:bg-blue-700 text-white">
+                    Contact Now
+                  </Button>
+                </div>
               </div>
-            </button>
+            </div>
 
-            <div className="flex items-center justify-between p-4">
+            {/* Notifications */}
+            <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                   <Bell className="w-5 h-5 text-blue-600" />
@@ -282,15 +336,14 @@ const Profile = () => {
                   <div className="text-sm text-gray-500">Receive alerts and updates</div>
                 </div>
               </div>
-              <div className={`w-12 h-6 rounded-full ${notifications ? 'bg-green-500' : 'bg-gray-300'} relative transition-colors`}>
-                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${notifications ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
-                <span className={`text-xs font-bold absolute inset-0 flex items-center justify-center text-white ${notifications ? 'pl-1' : 'pr-1'}`}>
-                  {notifications ? 'On' : 'Off'}
-                </span>
-              </div>
+              <Switch 
+                checked={notifications} 
+                onCheckedChange={handleNotificationToggle}
+              />
             </div>
 
-            <div className="flex items-center justify-between p-4">
+            {/* Offline Mode */}
+            <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                   <WifiOff className="w-5 h-5 text-purple-600" />
@@ -300,7 +353,10 @@ const Profile = () => {
                   <div className="text-sm text-gray-500">Work without internet connection</div>
                 </div>
               </div>
-              <span className="text-gray-500 font-medium">Off</span>
+              <Switch 
+                checked={offlineMode} 
+                onCheckedChange={handleOfflineModeToggle}
+              />
             </div>
           </div>
         </div>

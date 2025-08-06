@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -23,10 +24,12 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import NotificationPanel from '@/components/NotificationPanel';
 
 const Home = () => {
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
+  const [showNotifications, setShowNotifications] = useState(false);
   
   // Get user data
   const userData = JSON.parse(localStorage.getItem('kisanmitra_user') || '{}');
@@ -130,12 +133,15 @@ const Home = () => {
             </SelectContent>
           </Select>
           
-          <div className="relative">
+          <button 
+            onClick={() => setShowNotifications(true)}
+            className="relative p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
             <Bell className="w-6 h-6 text-agri-gray" />
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-agri-danger rounded-full flex items-center justify-center animate-pulse">
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
               <span className="text-xs font-bold text-white">3</span>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -280,7 +286,6 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* Bottom Navigation */}
       <div className="mobile-bottom-nav">
         <div className="flex items-center justify-around py-3">
@@ -322,6 +327,12 @@ const Home = () => {
           </button>
         </div>
       </div>
+
+      {/* Notification Panel */}
+      <NotificationPanel 
+        isOpen={showNotifications} 
+        onClose={() => setShowNotifications(false)} 
+      />
     </div>
   );
 };
