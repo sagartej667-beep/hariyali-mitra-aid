@@ -192,7 +192,12 @@ const Orders = () => {
                         <MapPin className="w-5 h-5 text-agri-primary mt-0.5" />
                         <div className="flex-1">
                           <p className="font-medium text-text-secondary text-sm">Delivery Address</p>
-                          <p className="text-sm text-agri-gray">{order.address}</p>
+                          <p className="text-sm text-agri-gray">
+                            {typeof order.address === 'string' 
+                              ? order.address 
+                              : order.address?.address || 'Address not available'
+                            }
+                          </p>
                           {order.deliveryDate && (
                             <p className="text-sm text-agri-success mt-1">
                               Delivered on {new Date(order.deliveryDate).toLocaleDateString()}
