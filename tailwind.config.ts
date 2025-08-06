@@ -12,12 +12,20 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '1rem',
 			screens: {
+				'sm': '640px',
+				'md': '768px',
+				'lg': '1024px',
+				'xl': '1280px',
 				'2xl': '1400px'
 			}
 		},
 		extend: {
+			fontFamily: {
+				'inter': ['Inter', 'sans-serif'],
+				'sans': ['Inter', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -52,16 +60,24 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+				// Agricultural color system
+				'agri-primary': 'hsl(var(--primary-green))',
+				'agri-secondary': 'hsl(var(--secondary-green))',
+				'agri-accent': 'hsl(var(--accent-green))',
+				'agri-light': 'hsl(var(--light-green))',
+				'agri-success': 'hsl(var(--success-green))',
+				'agri-warning': 'hsl(var(--warning-orange))',
+				'agri-danger': 'hsl(var(--danger-red))',
+				'agri-info': 'hsl(var(--info-blue))',
+				'agri-light-blue': 'hsl(var(--light-blue))',
+				'agri-purple': 'hsl(var(--purple))',
+				'agri-light-purple': 'hsl(var(--light-purple))',
+				'agri-cream': 'hsl(var(--cream))',
+				'agri-light-cream': 'hsl(var(--light-cream))',
+				'agri-gray': 'hsl(var(--gray))',
+				'agri-light-gray': 'hsl(var(--light-gray))',
+				'text-primary': 'hsl(var(--text-primary))',
+				'text-secondary': 'hsl(var(--text-secondary))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
