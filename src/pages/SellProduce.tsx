@@ -18,17 +18,107 @@ import {
   MoreVertical,
   Package,
   Truck,
-  DollarSign
+  DollarSign,
+  ShoppingCart,
+  Bell,
+  CheckCircle,
+  Clock,
+  User,
+  Navigation,
+  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 const SellProduce = () => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState('my-listings');
+  const [selectedTab, setSelectedTab] = useState('sell-now');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSellDialog, setShowSellDialog] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [pricePerKg, setPricePerKg] = useState('');
+  const [description, setDescription] = useState('');
+  const [showMarketRequests, setShowMarketRequests] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [showDeliveryOptions, setShowDeliveryOptions] = useState(false);
+  const [farmerLocation, setFarmerLocation] = useState('');
+
+  const products = [
+    { id: 'tomatoes', name: 'Tomatoes', category: 'Vegetables', avgPrice: 25 },
+    { id: 'wheat', name: 'Wheat', category: 'Grains', avgPrice: 22 },
+    { id: 'onions', name: 'Onions', category: 'Vegetables', avgPrice: 18 },
+    { id: 'rice', name: 'Rice', category: 'Grains', avgPrice: 35 },
+    { id: 'potatoes', name: 'Potatoes', category: 'Vegetables', avgPrice: 12 },
+    { id: 'chili', name: 'Green Chilies', category: 'Spices', avgPrice: 80 },
+    { id: 'sugarcane', name: 'Sugarcane', category: 'Cash Crops', avgPrice: 3 },
+    { id: 'cotton', name: 'Cotton', category: 'Cash Crops', avgPrice: 55 }
+  ];
+
+  const marketRequests = [
+    {
+      id: '1',
+      marketName: 'FreshMart Wholesale',
+      location: 'Lucknow, UP - 15km away',
+      requestedQuantity: '500 kg',
+      offeredPrice: 27,
+      responseTime: '2 hours ago',
+      status: 'pending',
+      rating: 4.5,
+      established: '2018'
+    },
+    {
+      id: '2',
+      marketName: 'Green Valley Market',
+      location: 'Hardoi, UP - 8km away',
+      requestedQuantity: '300 kg',
+      offeredPrice: 26,
+      responseTime: '4 hours ago',
+      status: 'pending',
+      rating: 4.2,
+      established: '2020'
+    },
+    {
+      id: '3',
+      marketName: 'Kisan Bazaar',
+      location: 'Sitapur, UP - 25km away',
+      requestedQuantity: '800 kg',
+      offeredPrice: 25,
+      responseTime: '6 hours ago',
+      status: 'pending',
+      rating: 4.7,
+      established: '2015'
+    }
+  ];
+
+  const transportOptions = [
+    {
+      id: '1',
+      vehicleType: 'Pickup Truck',
+      capacity: '1000 kg',
+      rate: '₹5 per km',
+      estimatedTime: '30-45 mins',
+      driverName: 'Rajesh Kumar',
+      rating: 4.8,
+      phone: '+91 98765 43210'
+    },
+    {
+      id: '2',
+      vehicleType: 'Mini Truck',
+      capacity: '2000 kg',
+      rate: '₹8 per km',
+      estimatedTime: '45-60 mins',
+      driverName: 'Suresh Singh',
+      rating: 4.6,
+      phone: '+91 98765 43211'
+    }
+  ];
 
   const myListings = [
     {
@@ -223,11 +313,268 @@ const SellProduce = () => {
 
         {/* Navigation Tabs */}
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl p-1">
+            <TabsTrigger value="sell-now" className="text-sm">Sell Now</TabsTrigger>
             <TabsTrigger value="my-listings" className="text-sm">My Listings</TabsTrigger>
-            <TabsTrigger value="market-prices" className="text-sm">Market Prices</TabsTrigger>
+            <TabsTrigger value="market-prices" className="text-sm">Prices</TabsTrigger>
             <TabsTrigger value="buyer-requirements" className="text-sm">Buyers</TabsTrigger>
           </TabsList>
+
+          {/* Sell Now Tab - New Primary Tab */}
+          <TabsContent value="sell-now" className="space-y-4 mt-4">
+            <Card className="bg-white rounded-2xl shadow-soft border border-agri-light-gray">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl text-text-secondary flex items-center space-x-2">
+                  <ShoppingCart className="w-6 h-6 text-agri-primary" />
+                  <span>Start Selling</span>
+                </CardTitle>
+                <CardDescription>Choose what you want to sell and get connected with nearby markets</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Product Selection */}
+                <div>
+                  <h3 className="text-lg font-semibold text-text-secondary mb-3">Select Your Product</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {products.map((product) => (
+                      <button
+                        key={product.id}
+                        onClick={() => setSelectedProduct(product.id)}
+                        className={`p-4 rounded-xl border-2 transition-all ${
+                          selectedProduct === product.id
+                            ? 'border-agri-primary bg-agri-light'
+                            : 'border-agri-light-gray bg-white hover:border-agri-primary/50'
+                        }`}
+                      >
+                        <div className="text-left">
+                          <p className="font-medium text-text-secondary">{product.name}</p>
+                          <p className="text-sm text-agri-gray">{product.category}</p>
+                          <p className="text-sm text-agri-primary font-semibold">₹{product.avgPrice}/kg avg</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {selectedProduct && (
+                  <>
+                    {/* Quantity & Price */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-text-secondary mb-2">Quantity (kg)</label>
+                        <Input
+                          type="number"
+                          placeholder="Enter quantity"
+                          value={quantity}
+                          onChange={(e) => setQuantity(e.target.value)}
+                          className="text-base"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-text-secondary mb-2">Price per kg (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="Your price"
+                          value={pricePerKg}
+                          onChange={(e) => setPricePerKg(e.target.value)}
+                          className="text-base"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                      <label className="block text-sm font-medium text-text-secondary mb-2">Product Description</label>
+                      <Textarea
+                        placeholder="Describe your product quality, harvest date, etc."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="text-base"
+                        rows={3}
+                      />
+                    </div>
+
+                    {/* Total Estimate */}
+                    {quantity && pricePerKg && (
+                      <div className="bg-agri-light rounded-xl p-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-text-secondary font-medium">Total Estimated Value:</span>
+                          <span className="text-2xl font-bold text-agri-primary">₹{(parseInt(quantity) * parseInt(pricePerKg)).toLocaleString()}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Submit Request */}
+                    <Button 
+                      onClick={() => setShowMarketRequests(true)}
+                      disabled={!quantity || !pricePerKg}
+                      className="w-full bg-agri-primary hover:bg-agri-primary/90 text-white py-3 text-lg font-semibold"
+                    >
+                      <Bell className="w-5 h-5 mr-2" />
+                      Send Request to Markets
+                    </Button>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Market Requests Dialog */}
+            <Dialog open={showMarketRequests} onOpenChange={setShowMarketRequests}>
+              <DialogContent className="max-w-md mx-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center space-x-2">
+                    <Bell className="w-5 h-5 text-agri-primary" />
+                    <span>Market Responses</span>
+                  </DialogTitle>
+                  <DialogDescription>
+                    Markets near you are interested in your {products.find(p => p.id === selectedProduct)?.name}
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {marketRequests.map((request) => (
+                    <div key={request.id} className="border border-agri-light-gray rounded-xl p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="font-semibold text-text-secondary">{request.marketName}</h4>
+                          <p className="text-sm text-agri-gray flex items-center">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            {request.location}
+                          </p>
+                        </div>
+                        <Badge className="bg-agri-primary text-white">
+                          ⭐ {request.rating}
+                        </Badge>
+                      </div>
+                      
+                      <div className="bg-agri-light rounded-lg p-3 mb-3">
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <span className="text-agri-gray">Quantity:</span>
+                            <p className="font-semibold">{request.requestedQuantity}</p>
+                          </div>
+                          <div>
+                            <span className="text-agri-gray">Price Offered:</span>
+                            <p className="font-semibold text-agri-primary">₹{request.offeredPrice}/kg</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-2">
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-agri-success hover:bg-agri-success/90"
+                          onClick={() => {
+                            setSelectedRequest(request);
+                            setShowDeliveryOptions(true);
+                            setShowMarketRequests(false);
+                          }}
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Accept
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1">
+                          <Phone className="w-4 h-4 mr-1" />
+                          Call
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Delivery Options Dialog */}
+            <Dialog open={showDeliveryOptions} onOpenChange={setShowDeliveryOptions}>
+              <DialogContent className="max-w-md mx-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center space-x-2">
+                    <Truck className="w-5 h-5 text-agri-primary" />
+                    <span>Choose Delivery Method</span>
+                  </DialogTitle>
+                  <DialogDescription>
+                    How would you like to deliver your produce to {selectedRequest?.marketName}?
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4">
+                  {/* Self Delivery */}
+                  <div className="border border-agri-light-gray rounded-xl p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <User className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-text-secondary">Self Delivery</h4>
+                        <p className="text-sm text-agri-gray">Take your produce to the market yourself</p>
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                      <p className="text-sm"><strong>Market Address:</strong> {selectedRequest?.location}</p>
+                      <p className="text-sm text-agri-gray mt-1">No additional transport cost</p>
+                    </div>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      <Navigation className="w-4 h-4 mr-2" />
+                      Choose Self Delivery
+                    </Button>
+                  </div>
+
+                  {/* Transport Service */}
+                  <div className="border border-agri-light-gray rounded-xl p-4">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <Truck className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-text-secondary">Transport Service</h4>
+                        <p className="text-sm text-agri-gray">Vehicle will come to your location</p>
+                      </div>
+                    </div>
+                    
+                    {/* Location Input */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-text-secondary mb-2">Your Location</label>
+                      <Input
+                        placeholder="Enter your complete address"
+                        value={farmerLocation}
+                        onChange={(e) => setFarmerLocation(e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    
+                    {/* Transport Options */}
+                    <div className="space-y-2 mb-3">
+                      {transportOptions.map((transport) => (
+                        <div key={transport.id} className="bg-green-50 rounded-lg p-3 border border-green-200">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="font-medium text-text-secondary">{transport.vehicleType}</p>
+                              <p className="text-sm text-agri-gray">Driver: {transport.driverName} ⭐ {transport.rating}</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-semibold text-agri-primary">{transport.rate}</p>
+                              <p className="text-xs text-agri-gray">{transport.estimatedTime}</p>
+                            </div>
+                          </div>
+                          <Button size="sm" variant="outline" className="w-full border-green-600 text-green-600">
+                            <Phone className="w-3 h-3 mr-1" />
+                            Book {transport.vehicleType}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => setShowDeliveryOptions(false)}
+                  >
+                    Choose Later
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </TabsContent>
 
           {/* My Listings Tab */}
           <TabsContent value="my-listings" className="space-y-4 mt-4">
