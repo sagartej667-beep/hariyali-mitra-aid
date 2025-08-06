@@ -142,50 +142,109 @@ const Home = () => {
 
       {/* Content */}
       <div className="mobile-content space-y-6 pt-4">
-        {/* Weather Card */}
-        <div className="weather-card">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <Sun className="w-6 h-6 text-blue-600" />
+        {/* Enhanced Weather Card */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-blue-100 to-cyan-100 p-6 shadow-large border border-blue-200">
+          <div className="absolute top-4 right-4">
+            <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+              <span className="text-xs font-semibold text-blue-800">Live Weather</span>
+            </div>
+          </div>
+          
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                <Sun className="w-8 h-8 text-blue-600" />
               </div>
               <div>
-                <div className="text-3xl font-bold text-blue-900">28°C</div>
-                <div className="text-blue-700 font-medium">Partly Cloudy</div>
+                <div className="text-4xl font-bold text-blue-900 mb-1">28°C</div>
+                <div className="text-blue-700 font-semibold text-lg">Partly Cloudy</div>
+                <div className="text-blue-600 text-sm">Feels like 31°C</div>
               </div>
             </div>
-            <Cloud className="w-8 h-8 text-blue-400 float-animation" />
+            <Cloud className="w-12 h-12 text-blue-400 float-animation opacity-60" />
+          </div>
+          
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="bg-white/30 rounded-xl p-3 text-center backdrop-blur-sm">
+              <div className="text-blue-800 font-bold text-lg">76%</div>
+              <div className="text-blue-600 text-xs">Humidity</div>
+            </div>
+            <div className="bg-white/30 rounded-xl p-3 text-center backdrop-blur-sm">
+              <div className="text-blue-800 font-bold text-lg">12 km/h</div>
+              <div className="text-blue-600 text-xs">Wind Speed</div>
+            </div>
+            <div className="bg-white/30 rounded-xl p-3 text-center backdrop-blur-sm">
+              <div className="text-blue-800 font-bold text-lg">8 UV</div>
+              <div className="text-blue-600 text-xs">UV Index</div>
+            </div>
           </div>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-agri-success" />
-              <span className="text-sm font-medium text-agri-success">Perfect for field work</span>
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-semibold text-green-700">Perfect for field work</span>
             </div>
-            <Button variant="outline" size="sm" className="text-blue-600 border-blue-600 hover:bg-blue-50">
-              View Details
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="bg-white/40 border-white/50 text-blue-700 hover:bg-white/60 backdrop-blur-sm font-medium"
+            >
+              7-Day Forecast
             </Button>
           </div>
+          
+          <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-blue-300/20 rounded-full" />
+          <div className="absolute -top-8 -right-8 w-16 h-16 bg-cyan-300/20 rounded-full" />
         </div>
 
-        {/* Daily Farming Tip */}
-        <div className="tip-card">
-          <div className="flex items-start space-x-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <Lightbulb className="w-5 h-5 text-yellow-600" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
-                <h3 className="font-semibold text-orange-900">Today's Farming Tip</h3>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
-                  Admin Managed
-                </span>
-              </div>
-              <p className="text-sm text-orange-800 leading-relaxed">
-                Early morning (6-8 AM) is optimal for pesticide application - calm winds and cooler temperatures reduce drift and improve effectiveness.
-              </p>
+        {/* Enhanced Daily Farming Tip */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 p-6 shadow-large border-l-4 border-yellow-400">
+          <div className="absolute top-4 right-4">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full">
+              <span className="text-xs font-bold">Expert Tip</span>
             </div>
           </div>
+          
+          <div className="flex items-start space-x-4 mb-4">
+            <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <Lightbulb className="w-7 h-7 text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center space-x-2 mb-3">
+                <h3 className="text-xl font-bold text-orange-900">Today's Smart Farming Tip</h3>
+              </div>
+              <p className="text-orange-800 leading-relaxed font-medium">
+                🌅 <strong>Best Practice:</strong> Early morning (6-8 AM) is optimal for pesticide application. Calm winds and cooler temperatures reduce drift and improve effectiveness by 40%.
+              </p>
+              
+              <div className="flex items-center space-x-4 mt-4">
+                <div className="bg-orange-100 px-3 py-1 rounded-full">
+                  <span className="text-xs font-semibold text-orange-700">💡 Pro Tip</span>
+                </div>
+                <div className="bg-green-100 px-3 py-1 rounded-full">
+                  <span className="text-xs font-semibold text-green-700">✅ Proven Method</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between pt-4 border-t border-yellow-200">
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">AI</span>
+              </div>
+              <span className="text-sm font-medium text-orange-700">Powered by KisanMitra AI</span>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200 font-medium"
+            >
+              More Tips
+            </Button>
+          </div>
+          
+          <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-yellow-300/20 rounded-full" />
         </div>
 
         {/* AI Diagnosis Feature */}

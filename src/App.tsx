@@ -9,6 +9,13 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Diagnose from "./pages/Diagnose";
+import Shop from "./pages/Shop";
+import Orders from "./pages/Orders";
+import Profile from "./pages/Profile";
+import Treatments from "./pages/Treatments";
+import Guides from "./pages/Guides";
+import NearbyShops from "./pages/NearbyShops";
+import SellProduce from "./pages/SellProduce";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +33,13 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/diagnose" element={<Diagnose />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/treatments" element={<Treatments />} />
+          <Route path="/guides" element={<Guides />} />
+          <Route path="/shops" element={<NearbyShops />} />
+          <Route path="/sell" element={<SellProduce />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
