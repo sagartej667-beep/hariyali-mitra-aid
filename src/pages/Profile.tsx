@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -25,11 +25,11 @@ import { Badge } from '@/components/ui/badge';
 const Profile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
-    name: 'Ramu Ji',
+    name: 'Farmer',
     phone: '+91 98765 43210',
     birthDate: '15 March 1985',
-    location: 'Hyderabad',
-    state: 'Telangana',
+    location: 'District',
+    state: 'State',
     pincode: '500001',
     language: 'English',
     avatar: null
@@ -37,6 +37,21 @@ const Profile = () => {
 
   const [notifications, setNotifications] = useState(true);
   const [offlineMode, setOfflineMode] = useState(false);
+
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const savedUserData = localStorage.getItem('kisanmitra_user');
+    if (savedUserData) {
+      const parsedData = JSON.parse(savedUserData);
+      setUserData(prev => ({
+        ...prev,
+        name: parsedData.name || prev.name,
+        phone: parsedData.mobile || prev.phone,
+        state: parsedData.state || prev.state,
+        location: parsedData.district || prev.location,
+      }));
+    }
+  }, []);
 
   const farmingStats = [
     { 
