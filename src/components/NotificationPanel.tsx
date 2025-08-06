@@ -108,8 +108,8 @@ const NotificationPanel = ({ isOpen, onClose }: NotificationPanelProps) => {
         </div>
 
         {/* Notifications List */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="p-4 space-y-4 pb-20">
             {notifications.map((notification) => (
               <div
                 key={notification.id}

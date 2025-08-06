@@ -255,29 +255,47 @@ const Profile = () => {
           </div>
 
           <div className="space-y-4">
+            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-large">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-green-100 text-sm mb-1">Total Earnings</p>
+                  <p className="text-3xl font-bold">₹47,280</p>
+                  <p className="text-green-100 text-sm mt-1">This month: +₹10,750</p>
+                </div>
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-white/20">
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-100">Active Listings: 3</span>
+                  <span className="text-green-100">Sold Items: 15</span>
+                </div>
+              </div>
+            </div>
+            
             {produceListings.map((produce) => (
-              <div key={produce.id} className="border-b border-gray-100 last:border-b-0 pb-4 last:pb-0">
-                <div className="flex items-center justify-between mb-2">
+              <div key={produce.id} className="bg-white rounded-xl p-4 shadow-soft border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <h4 className="text-lg font-semibold text-gray-900">{produce.name}</h4>
-                    <Badge className={produce.statusColor}>
-                      {produce.status}
-                    </Badge>
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                      <ShoppingBag className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{produce.name}</h4>
+                      <p className="text-sm text-gray-600">{produce.quantity} • {produce.pricePerKg}</p>
+                    </div>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <Share className="w-5 h-5" />
-                  </button>
+                  <Badge className={produce.statusColor}>
+                    {produce.status}
+                  </Badge>
                 </div>
-                
-                <div className="flex items-center space-x-6 text-sm text-gray-600">
-                  <span>{produce.quantity}</span>
-                  <span>{produce.pricePerKg}</span>
-                  <span className="text-green-600 font-semibold">{produce.totalPrice}</span>
-                </div>
-                
-                <div className="flex items-center space-x-2 mt-2">
-                  <MessageCircle className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm text-blue-500">{produce.inquiries} inquiries</span>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Expected: {produce.totalPrice}</span>
+                  <div className="flex items-center space-x-1">
+                    <MessageCircle className="w-4 h-4 text-blue-500" />
+                    <span className="text-blue-500">{produce.inquiries} inquiries</span>
+                  </div>
                 </div>
               </div>
             ))}
