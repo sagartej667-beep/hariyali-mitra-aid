@@ -106,9 +106,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="mobile-container bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between p-4">
+      <div className="mobile-header">
         <div className="flex items-center space-x-3">
           <button 
             onClick={() => navigate(-1)}
@@ -116,11 +116,11 @@ const Profile = () => {
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
+          <h1 className="text-xl font-bold text-text-secondary">Profile</h1>
         </div>
       </div>
 
-      <div className="px-4 space-y-6">
+      <div className="mobile-content space-y-6 pt-4">
         {/* Profile Header Card */}
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl p-6 text-white relative overflow-hidden">
           <div className="flex items-start justify-between mb-6">
