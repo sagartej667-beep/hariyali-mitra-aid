@@ -256,7 +256,7 @@ const SellProduce = () => {
           <h1 className="text-xl font-bold text-text-secondary">Sell Produce</h1>
         </div>
         
-        <button onClick={() => navigate('/sell/new')}>
+        <button onClick={() => setShowSellDialog(true)}>
           <Plus className="w-6 h-6 text-agri-primary" />
         </button>
       </div>
@@ -300,7 +300,7 @@ const SellProduce = () => {
             <h2 className="text-xl font-bold mb-2">Sell Your Fresh Produce</h2>
             <p className="text-white/90 mb-4">Reach thousands of buyers across India</p>
             <Button 
-              onClick={() => navigate('/sell/new')}
+              onClick={() => setShowSellDialog(true)}
               className="bg-white text-agri-primary hover:bg-white/90 font-semibold flex items-center space-x-2"
             >
               <Camera className="w-5 h-5" />
@@ -836,6 +836,104 @@ const SellProduce = () => {
           </div>
         </div>
       </div>
+
+      {/* Create New Listing Dialog */}
+      <Dialog open={showSellDialog} onOpenChange={setShowSellDialog}>
+        <DialogContent className="max-w-md mx-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Camera className="w-5 h-5 text-agri-primary" />
+              <span>Create New Listing</span>
+            </DialogTitle>
+            <DialogDescription>
+              Add your fresh produce to reach buyers across the region
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* Product Selection */}
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-2">Select Product</label>
+              <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose what to sell" />
+                </SelectTrigger>
+                <SelectContent>
+                  {products.map((product) => (
+                    <SelectItem key={product.id} value={product.id}>
+                      {product.name} - ₹{product.avgPrice}/kg avg
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Quantity & Price */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-2">Quantity (kg)</label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-2">Price/kg (₹)</label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={pricePerKg}
+                  onChange={(e) => setPricePerKg(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-text-secondary mb-2">Description</label>
+              <Textarea
+                placeholder="Describe quality, harvest date, organic certification..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            {/* Total Value */}
+            {quantity && pricePerKg && (
+              <div className="bg-agri-light rounded-lg p-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-agri-gray">Total Value:</span>
+                  <span className="font-bold text-agri-primary">₹{(parseInt(quantity) * parseInt(pricePerKg)).toLocaleString()}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3 pt-2">
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={() => setShowSellDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="flex-1 bg-agri-primary hover:bg-agri-primary/90"
+                disabled={!selectedProduct || !quantity || !pricePerKg}
+                onClick={() => {
+                  setShowSellDialog(false);
+                  setShowMarketRequests(true);
+                }}
+              >
+                List Now
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
