@@ -291,12 +291,9 @@ const Home = () => {
           
           <button 
             onClick={() => navigate('/diagnose')}
-            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
+            className="flex flex-col items-center space-y-1 px-3 py-2"
           >
-            <div className="relative">
-              <Camera className="w-6 h-6 text-agri-gray" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-agri-primary rounded-full animate-pulse"></div>
-            </div>
+            <Camera className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Diagnose</span>
           </button>
           
