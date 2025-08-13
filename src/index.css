@@ -340,26 +340,6 @@
     }
   }
   
-  @keyframes slide-in-right {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes weather-glow {
-    0%, 100% {
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
-    }
-  }
-  
   .animate-slide-up {
     animation: slideUp 0.5s ease-out;
   }
@@ -376,13 +356,5 @@
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
-  }
-  
-  .animate-slide-in-right {
-    animation: slide-in-right 0.3s ease-out;
-  }
-  
-  .animate-weather-glow {
-    animation: weather-glow 3s ease-in-out infinite;
   }
 }
