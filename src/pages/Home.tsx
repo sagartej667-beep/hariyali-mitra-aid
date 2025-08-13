@@ -15,8 +15,6 @@ import {
   TrendingUp,
   Store,
   Leaf,
-  Cloud,
-  Sun,
   CheckCircle,
   ChevronDown,
   Badge,
@@ -25,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import NotificationPanel from '@/components/NotificationPanel';
+import WeatherCard from '@/components/WeatherCard';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -147,30 +146,8 @@ const Home = () => {
 
       {/* Content */}
       <div className="mobile-content space-y-6 pt-4">
-        {/* Weather Card */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-white/30 rounded-2xl flex items-center justify-center">
-                <Cloud className="w-7 h-7 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-blue-900">28°C</div>
-                <div className="text-lg text-blue-800 mb-2">Partly Cloudy</div>
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <Sun className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm text-blue-700">High: 32°C | Low: 24°C</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Cloud className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-700">Rainfall: 15% chance</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Enhanced Weather Card */}
+        <WeatherCard />
 
         {/* Daily Farming Tip */}
         <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl p-4 border-l-4 border-yellow-400">
