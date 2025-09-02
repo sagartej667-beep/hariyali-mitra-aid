@@ -17,27 +17,23 @@ const Landing = () => {
   const features = [
     {
       icon: Camera,
-      title: 'फोटो से पहचान',
-      subtitle: 'Instant Disease Detection',
-      description: 'Take a photo, get instant diagnosis'
+      title: 'Instant Disease Detection',
+      description: 'Take a photo, get instant diagnosis and treatment recommendations'
     },
     {
       icon: CloudRain,
-      title: 'मौसम अलर्ट',
-      subtitle: 'Weather Alerts', 
-      description: 'Know when to irrigate or protect crops'
+      title: 'Weather Alerts', 
+      description: 'Know when to irrigate, harvest, or protect your crops'
     },
     {
       icon: TrendingUp,
-      title: 'बाज़ार भाव',
-      subtitle: 'Market Prices',
-      description: 'Sell at the right time for maximum profit'
+      title: 'Market Price Tracking',
+      description: 'Sell at the right time for maximum profit with live prices'
     },
     {
       icon: Users,
-      title: 'किसान समुदाय',
-      subtitle: 'Farmer Community',
-      description: 'Learn from successful local farmers'
+      title: 'Farmer Community',
+      description: 'Learn from successful local farmers and share knowledge'
     }
   ];
 
@@ -77,9 +73,9 @@ const Landing = () => {
             <div className="absolute bottom-4 left-4 text-white">
               <div className="flex items-center space-x-2 mb-2">
                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="text-sm font-medium">25% बेहतर पैदावार</span>
+                <span className="text-sm font-medium">25% Better Yield</span>
               </div>
-              <p className="text-xs opacity-90">राजू पाटील, महाराष्ट्र</p>
+              <p className="text-xs opacity-90">Raju Patil, Maharashtra</p>
             </div>
           </div>
 
@@ -88,20 +84,20 @@ const Landing = () => {
             <div className="space-y-4">
               <div className={`transform transition-all duration-1000 delay-900 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
                 <h2 className="text-3xl font-bold leading-tight text-foreground">
-                  खेती में कमाई बढ़ाएं
+                  Increase Farm Earnings
                   <br />
                   <span className="bg-gradient-to-r from-agri-primary to-agri-success bg-clip-text text-transparent">
-                    AI के साथ
+                    with AI Power
                   </span>
                 </h2>
                 <p className="text-lg text-agri-primary font-semibold mt-2">
-                  Better Crops, Better Earnings
+                  Your Pocket Agriculture Expert
                 </p>
               </div>
               
               <div className={`transform transition-all duration-1000 delay-1100 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
                 <p className="text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                  फोटो खींचें, तुरंत पहचान पाएं। मौसम अलर्ट और बाज़ार भाव के साथ अपनी फसल की देखभाल करें।
+                  Take a photo, get instant diagnosis. Manage your crops with weather alerts and live market prices.
                 </p>
               </div>
             </div>
@@ -110,15 +106,15 @@ const Landing = () => {
             <div className={`flex items-center justify-center space-x-4 py-4 transform transition-all duration-1000 delay-1200 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <div className="flex items-center space-x-1">
                 <CheckCircle className="w-4 h-4 text-agri-success" />
-                <span className="text-sm font-medium text-agri-success">15K+ किसान</span>
+                <span className="text-sm font-medium text-agri-success">15K+ Farmers</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                <span className="text-sm font-medium">4.8 रेटिंग</span>
+                <span className="text-sm font-medium">4.8 Rating</span>
               </div>
               <div className="flex items-center space-x-1">
                 <TrendingUp className="w-4 h-4 text-agri-primary" />
-                <span className="text-sm font-medium text-agri-primary">25% अधिक कमाई</span>
+                <span className="text-sm font-medium text-agri-primary">25% More Earnings</span>
               </div>
             </div>
 
@@ -128,12 +124,12 @@ const Landing = () => {
                 onClick={() => navigate('/signup')}
                 className="w-full h-14 bg-gradient-to-r from-agri-primary to-agri-success hover:from-agri-primary/90 hover:to-agri-success/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
               >
-                <span>मुफ़्त शुरू करें</span>
+                <span>Start Free Trial</span>
                 <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
               
               <p className="text-xs text-muted-foreground">
-                30 दिन मुफ़्त ट्रायल • किसी भी समय रद्द करें
+                30 days free trial • Cancel anytime
               </p>
             </div>
 
