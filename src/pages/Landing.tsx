@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sprout, ChevronRight, Sparkles, Shield, Zap, Users } from 'lucide-react';
+import { Sprout, ChevronRight, Camera, CloudRain, TrendingUp, Users, Star, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import farmerHero from '@/assets/farmer-hero.jpg';
+import aiDiagnosis from '@/assets/ai-diagnosis.jpg';
+import farmerCommunity from '@/assets/farmer-community.jpg';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -13,24 +16,28 @@ const Landing = () => {
 
   const features = [
     {
-      icon: Sparkles,
-      title: 'AI-Powered',
-      description: 'Smart plant diagnosis using advanced AI technology'
+      icon: Camera,
+      title: 'फोटो से पहचान',
+      subtitle: 'Instant Disease Detection',
+      description: 'Take a photo, get instant diagnosis'
     },
     {
-      icon: Shield,
-      title: 'Expert Support',
-      description: 'Get guidance from agricultural experts'
+      icon: CloudRain,
+      title: 'मौसम अलर्ट',
+      subtitle: 'Weather Alerts', 
+      description: 'Know when to irrigate or protect crops'
     },
     {
-      icon: Zap,
-      title: 'Instant Results',
-      description: 'Quick solutions for your farming challenges'
+      icon: TrendingUp,
+      title: 'बाज़ार भाव',
+      subtitle: 'Market Prices',
+      description: 'Sell at the right time for maximum profit'
     },
     {
       icon: Users,
-      title: 'Community',
-      description: 'Connect with fellow farmers and share knowledge'
+      title: 'किसान समुदाय',
+      subtitle: 'Farmer Community',
+      description: 'Learn from successful local farmers'
     }
   ];
 
@@ -62,44 +69,72 @@ const Landing = () => {
         </div>
 
         {/* Hero Section */}
-        <div className="flex-1 flex flex-col justify-center px-6 py-12">
-          <div className="text-center space-y-8">
-            {/* Main Hero Content */}
-            <div className="space-y-6">
-              <div className={`transform transition-all duration-1000 delay-700 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-                  <span className="bg-gradient-to-r from-agri-primary via-agri-success to-agri-primary bg-clip-text text-transparent">
-                    Smart Farming
-                  </span>
+        <div className="flex-1 flex flex-col px-6 py-8">
+          {/* Hero Image */}
+          <div className={`relative rounded-3xl overflow-hidden mb-8 transform transition-all duration-1000 delay-700 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <img src={farmerHero} alt="Happy farmer using KisanMitra app" className="w-full h-48 object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute bottom-4 left-4 text-white">
+              <div className="flex items-center space-x-2 mb-2">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span className="text-sm font-medium">25% बेहतर पैदावार</span>
+              </div>
+              <p className="text-xs opacity-90">राजू पाटील, महाराष्ट्र</p>
+            </div>
+          </div>
+
+          <div className="text-center space-y-6">
+            {/* Main Headlines */}
+            <div className="space-y-4">
+              <div className={`transform transition-all duration-1000 delay-900 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                <h2 className="text-3xl font-bold leading-tight text-foreground">
+                  खेती में कमाई बढ़ाएं
                   <br />
-                  <span className="text-foreground">Made Simple</span>
+                  <span className="bg-gradient-to-r from-agri-primary to-agri-success bg-clip-text text-transparent">
+                    AI के साथ
+                  </span>
                 </h2>
+                <p className="text-lg text-agri-primary font-semibold mt-2">
+                  Better Crops, Better Earnings
+                </p>
               </div>
               
-              <div className={`transform transition-all duration-1000 delay-900 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                <p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  Diagnose plant diseases instantly, get expert advice, and boost your farm's productivity with AI-powered insights.
+              <div className={`transform transition-all duration-1000 delay-1100 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                <p className="text-muted-foreground max-w-sm mx-auto leading-relaxed">
+                  फोटो खींचें, तुरंत पहचान पाएं। मौसम अलर्ट और बाज़ार भाव के साथ अपनी फसल की देखभाल करें।
                 </p>
               </div>
             </div>
 
+            {/* Trust Indicators */}
+            <div className={`flex items-center justify-center space-x-4 py-4 transform transition-all duration-1000 delay-1200 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="flex items-center space-x-1">
+                <CheckCircle className="w-4 h-4 text-agri-success" />
+                <span className="text-sm font-medium text-agri-success">15K+ किसान</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                <span className="text-sm font-medium">4.8 रेटिंग</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <TrendingUp className="w-4 h-4 text-agri-primary" />
+                <span className="text-sm font-medium text-agri-primary">25% अधिक कमाई</span>
+              </div>
+            </div>
+
             {/* Action Buttons */}
-            <div className={`space-y-4 transform transition-all duration-1000 delay-1100 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`space-y-3 transform transition-all duration-1000 delay-1300 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <Button
                 onClick={() => navigate('/signup')}
-                className="w-full h-14 bg-gradient-to-r from-agri-primary to-agri-success hover:from-agri-primary/90 hover:to-agri-success/90 text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="w-full h-14 bg-gradient-to-r from-agri-primary to-agri-success hover:from-agri-primary/90 hover:to-agri-success/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
               >
-                <span>Get Started Free</span>
+                <span>मुफ़्त शुरू करें</span>
                 <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
               
-              <Button
-                onClick={() => navigate('/login')}
-                variant="outline"
-                className="w-full h-14 border-2 border-agri-primary/20 text-agri-primary hover:bg-agri-primary/5 hover:border-agri-primary/30 font-semibold text-lg transform hover:scale-105 transition-all duration-300"
-              >
-                Sign In to Continue
-              </Button>
+              <p className="text-xs text-muted-foreground">
+                30 दिन मुफ़्त ट्रायल • किसी भी समय रद्द करें
+              </p>
             </div>
 
             {/* Features Grid */}
