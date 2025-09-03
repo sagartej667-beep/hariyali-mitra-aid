@@ -1,328 +1,272 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Phone, MapPin, Lock, Sprout, Shield, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Eye, EyeOff, User, Phone, MapPin, Lock, Sprout } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useNavigate, Link } from "react-router-dom";
 
 const indianStates = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
-  'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
-  'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
-  'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
+  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
 ];
 
 const Signup = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    mobile: "",
+    state: "",
+    district: "",
+    pin: ""
+  });
   const [loading, setLoading] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    mobile: '',
-    state: '',
-    district: '',
-    pin: ''
-  });
-  const [pinStrength, setPinStrength] = useState(0);
+  const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    if (field === 'pin') {
-      // Calculate PIN strength
-      const strength = value.length * 25;
-      setPinStrength(Math.min(strength, 100));
+    if (field === "mobile") {
+      value = formatMobile(value);
     }
+    if (field === "pin" && value.length > 4) {
+      return;
+    }
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const formatMobile = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    const formatted = cleaned.replace(/(\d{5})(\d{5})/, '$1-$2');
-    return formatted;
+    const cleaned = value.replace(/\D/g, "");
+    return cleaned.slice(0, 10);
   };
 
-  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatMobile(e.target.value);
-    handleInputChange('mobile', formatted);
+  const isFormValid = () => {
+    return formData.name.trim() !== "" &&
+           formData.mobile.length === 10 &&
+           formData.state !== "" &&
+           formData.district.trim() !== "" &&
+           formData.pin.length === 4;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.mobile || !formData.state || !formData.pin) {
+    if (!isFormValid()) {
       toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (formData.pin.length !== 4) {
-      toast({
-        title: "Invalid PIN",
-        description: "PIN must be exactly 4 digits",
-        variant: "destructive",
+        title: "Please fill all fields",
+        description: "All fields are required to create your account",
+        variant: "destructive"
       });
       return;
     }
 
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      localStorage.setItem('kisanmitra_user', JSON.stringify({
-        name: formData.name,
-        mobile: formData.mobile,
-        state: formData.state,
-        district: formData.district,
-        registeredAt: new Date().toISOString()
-      }));
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       toast({
-        title: "Welcome to KisanMitra! 🌱",
-        description: "Your account has been created successfully",
+        title: "Account created successfully! 🎉",
+        description: `Welcome to KisanMitra, ${formData.name}! You can now access all farming features.`,
       });
       
+      // Navigate to home or login
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+      
+    } catch (error) {
+      toast({
+        title: "Registration failed",
+        description: "Please try again later",
+        variant: "destructive"
+      });
+    } finally {
       setLoading(false);
-      navigate('/home');
-    }, 2000);
+    }
   };
 
   return (
-    <div className="mobile-container">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-agri-cream overflow-hidden">
-        {/* Animated gradient mesh */}
-        <div className="absolute inset-0 gradient-mesh opacity-20" />
-        
-        {/* Floating shapes */}
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-agri-primary/10 float-animation"
-            style={{
-              width: Math.random() * 60 + 20 + 'px',
-              height: Math.random() * 60 + 20 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animationDelay: Math.random() * 4 + 's',
-              animationDuration: (Math.random() * 3 + 3) + 's',
-            }}
-          />
-        ))}
-        
-        {/* Crop silhouettes */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-agri-primary/5 to-transparent" />
+    <div className="min-h-screen bg-gradient-to-br from-agri-light to-background relative overflow-hidden">
+      {/* Subtle Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-10 -left-10 w-72 h-72 bg-agri-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-agri-secondary/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 min-h-screen">
-        {/* Header Section */}
-        <div className="text-center pt-12 pb-8 px-6">
-          <div className="mb-6 relative">
-            <Sprout className="w-16 h-16 text-agri-primary mx-auto mb-4 grow-animation" />
-            <div className="absolute -top-2 -right-8 animate-pulse">
-              <Sparkles className="w-6 h-6 text-agri-warning" />
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-6">
+        <div className="w-full max-w-md">
+          {/* Header with Farming Icon */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-agri-primary rounded-2xl mb-6 shadow-lg">
+              <Sprout className="w-10 h-10 text-white" />
             </div>
+            
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              Create Your Account
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Join thousands of smart farmers
+            </p>
           </div>
-          
-          <h1 className="text-3xl font-bold text-agri-accent mb-2 bg-gradient-to-r from-agri-primary to-agri-secondary bg-clip-text text-transparent">
-            Welcome to the Future of Farming
-          </h1>
-          
-          <div className="flex items-center justify-center space-x-2 text-agri-secondary">
-            <span className="text-sm font-medium">Join</span>
-            <div className="bg-agri-primary px-3 py-1 rounded-full">
-              <span className="text-white font-bold text-sm">50,000+</span>
-            </div>
-            <span className="text-sm font-medium">Smart Farmers</span>
-          </div>
-        </div>
 
-        {/* Form Container */}
-        <div className="px-6">
-          <div className="glass-card rounded-3xl p-8 border border-agri-primary/20 shadow-large">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Farmer Name */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-agri-accent flex items-center">
-                  <User className="w-4 h-4 mr-2 text-agri-primary" />
-                  Farmer Name
-                </label>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="bg-card rounded-2xl p-8 shadow-large border border-border/50">
+              {/* Name Field */}
+              <div className="space-y-3 mb-6">
+                <Label htmlFor="name" className="text-base font-medium text-foreground">
+                  Full Name
+                </Label>
                 <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="Enter your full name (e.g., Ramesh Kumar)"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    className="pl-12 h-14 border-agri-primary/20 focus:border-agri-primary transition-all duration-300"
-                  />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-6 h-6 rounded-full bg-agri-light flex items-center justify-center">
-                      <User className="w-3 h-3 text-agri-primary" />
-                    </div>
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="w-5 h-5 text-muted-foreground" />
                   </div>
-                  {formData.name && (
-                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-6 h-6 rounded-full bg-agri-success flex items-center justify-center grow-animation">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                    </div>
-                  )}
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="pl-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
                 </div>
               </div>
 
-              {/* Mobile Number */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-agri-accent flex items-center">
-                  <Phone className="w-4 h-4 mr-2 text-agri-primary" />
+              {/* Mobile Field */}
+              <div className="space-y-3 mb-6">
+                <Label htmlFor="mobile" className="text-base font-medium text-foreground">
                   Mobile Number
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center">
-                    <span className="text-agri-accent font-medium">🇮🇳 +91</span>
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span className="text-muted-foreground text-base font-medium">+91</span>
+                    <Phone className="w-5 h-5 text-muted-foreground ml-2" />
                   </div>
                   <Input
+                    id="mobile"
                     type="tel"
                     placeholder="Enter your mobile number"
                     value={formData.mobile}
-                    onChange={handleMobileChange}
-                    maxLength={11}
-                    className="pl-20 h-14 border-agri-primary/20 focus:border-agri-primary transition-all duration-300"
-                  />
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <Phone className="w-5 h-5 text-agri-primary animate-pulse" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Location Selection */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-agri-accent flex items-center">
-                    <MapPin className="w-4 h-4 mr-2 text-agri-primary pulse-glow" />
-                    State
-                  </label>
-                  <Select value={formData.state} onValueChange={(value) => handleInputChange('state', value)}>
-                    <SelectTrigger className="h-14 border-agri-primary/20 focus:border-agri-primary">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {indianStates.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-agri-accent">
-                    District
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Enter district"
-                    value={formData.district}
-                    onChange={(e) => handleInputChange('district', e.target.value)}
-                    className="h-14 border-agri-primary/20 focus:border-agri-primary transition-all duration-300"
+                    onChange={(e) => handleInputChange("mobile", e.target.value)}
+                    className="pl-20 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
 
-              {/* PIN Setup */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-agri-accent flex items-center">
-                  <Lock className="w-4 h-4 mr-2 text-agri-primary" />
-                  Create Secure PIN
-                  <Shield className="w-4 h-4 ml-2 text-agri-success" />
-                </label>
+              {/* State Field */}
+              <div className="space-y-3 mb-6">
+                <Label htmlFor="state" className="text-base font-medium text-foreground">
+                  State
+                </Label>
+                <Select onValueChange={(value) => handleInputChange("state", value)}>
+                  <SelectTrigger className="h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                    <div className="flex items-center">
+                      <MapPin className="w-5 h-5 text-muted-foreground mr-3" />
+                      <SelectValue placeholder="Select your state" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border border-border shadow-large rounded-lg">
+                    {indianStates.map((state) => (
+                      <SelectItem 
+                        key={state} 
+                        value={state}
+                        className="text-base py-3 px-4 hover:bg-accent focus:bg-accent"
+                      >
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* District Field */}
+              <div className="space-y-3 mb-6">
+                <Label htmlFor="district" className="text-base font-medium text-foreground">
+                  District
+                </Label>
                 <div className="relative">
-                  <Input
-                    type={showPin ? "text" : "password"}
-                    placeholder="Enter 4-digit PIN"
-                    value={formData.pin}
-                    onChange={(e) => handleInputChange('pin', e.target.value.replace(/\D/g, '').slice(0, 4))}
-                    maxLength={4}
-                    className="pl-12 pr-12 h-14 border-agri-primary/20 focus:border-agri-primary transition-all duration-300 text-center tracking-widest text-lg font-bold"
-                  />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <Lock className="w-5 h-5 text-agri-primary" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <MapPin className="w-5 h-5 text-muted-foreground" />
                   </div>
+                  <Input
+                    id="district"
+                    type="text"
+                    placeholder="Enter your district"
+                    value={formData.district}
+                    onChange={(e) => handleInputChange("district", e.target.value)}
+                    className="pl-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* PIN Field */}
+              <div className="space-y-3 mb-8">
+                <Label htmlFor="pin" className="text-base font-medium text-foreground">
+                  4-Digit PIN
+                </Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <Input
+                    id="pin"
+                    type={showPin ? "text" : "password"}
+                    placeholder="Create 4-digit PIN"
+                    value={formData.pin}
+                    onChange={(e) => handleInputChange("pin", e.target.value)}
+                    className="pl-12 pr-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono tracking-wider text-center"
+                    maxLength={4}
+                    inputMode="numeric"
+                  />
                   <button
                     type="button"
                     onClick={() => setShowPin(!showPin)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center hover:scale-110 transition-transform"
                   >
                     {showPin ? (
-                      <EyeOff className="w-5 h-5 text-agri-gray" />
+                      <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                     ) : (
-                      <Eye className="w-5 h-5 text-agri-gray" />
+                      <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                     )}
                   </button>
                 </div>
-                
-                {/* PIN Strength Indicator */}
-                {formData.pin && (
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-agri-accent">PIN Strength</span>
-                      <span className={`font-semibold ${pinStrength >= 100 ? 'text-agri-success' : 'text-agri-warning'}`}>
-                        {pinStrength >= 100 ? 'Strong' : pinStrength >= 75 ? 'Good' : 'Weak'}
-                      </span>
-                    </div>
-                    <div className="w-full bg-agri-light-gray rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          pinStrength >= 100 ? 'bg-agri-success' : 
-                          pinStrength >= 75 ? 'bg-agri-warning' : 'bg-agri-danger'
-                        }`}
-                        style={{ width: `${pinStrength}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full h-14 btn-primary text-lg font-semibold bg-agri-primary hover:bg-agri-secondary text-white"
+                disabled={!isFormValid() || loading}
+                className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg rounded-xl shadow-medium hover:shadow-large transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? (
-                  <div className="flex items-center space-x-2">
-                    <Sprout className="w-5 h-5 animate-spin" />
-                    <span>Creating Your Account...</span>
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-foreground mr-3"></div>
+                    Creating Account...
                   </div>
                 ) : (
-                  <div className="flex items-center space-x-2">
-                    <Sparkles className="w-5 h-5" />
-                    <span>Create My Account</span>
-                  </div>
+                  "Create My Account"
                 )}
               </Button>
+            </div>
+          </form>
 
-              {/* Login Link */}
-              <div className="text-center pt-4">
-                <button
-                  type="button"
-                  onClick={() => navigate('/login')}
-                  className="text-agri-primary font-medium hover:text-agri-secondary transition-colors"
-                >
-                  Already growing with us? Login here →
-                </button>
-              </div>
-            </form>
+          {/* Login Link */}
+          <div className="text-center mt-8">
+            <p className="text-muted-foreground text-base">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:text-primary/80 font-semibold hover:underline transition-colors text-base"
+              >
+                Login
+              </Link>
+            </p>
           </div>
         </div>
-
-        {/* Bottom Spacing */}
-        <div className="h-8" />
       </div>
     </div>
   );
