@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Phone, Lock, Sunrise, Moon, Sun, Sprout } from 'lucide-react';
+import { Eye, EyeOff, Phone, Lock, Sprout, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
@@ -15,29 +16,9 @@ const Login = () => {
     pin: ''
   });
 
-  // Get time-based greeting and icon
-  const getTimeBasedGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) {
-      return { greeting: 'Good Morning', icon: Sunrise, color: 'text-orange-500' };
-    } else if (hour < 17) {
-      return { greeting: 'Good Afternoon', icon: Sun, color: 'text-yellow-500' };
-    } else {
-      return { greeting: 'Good Evening', icon: Moon, color: 'text-blue-500' };
-    }
-  };
-
-  const { greeting, icon: TimeIcon, color } = getTimeBasedGreeting();
-
-  const formatMobile = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    const formatted = cleaned.replace(/(\d{5})(\d{5})/, '$1-$2');
-    return formatted;
-  };
-
   const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatMobile(e.target.value);
-    setFormData(prev => ({ ...prev, mobile: formatted }));
+    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 10);
+    setFormData(prev => ({ ...prev, mobile: cleaned }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,7 +27,16 @@ const Login = () => {
     if (!formData.mobile || !formData.pin) {
       toast({
         title: "Missing Information",
-        description: "Please enter your mobile number and PIN",
+        description: "Please enter mobile number and PIN",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (formData.mobile.length !== 10) {
+      toast({
+        title: "Invalid Mobile Number",
+        description: "Please enter 10 digit mobile number",
         variant: "destructive",
       });
       return;
@@ -55,7 +45,7 @@ const Login = () => {
     if (formData.pin.length !== 4) {
       toast({
         title: "Invalid PIN",
-        description: "PIN must be exactly 4 digits",
+        description: "PIN must be 4 digits",
         variant: "destructive",
       });
       return;
@@ -65,160 +55,123 @@ const Login = () => {
     
     // Simulate API call
     setTimeout(() => {
-      // Check if user exists (basic simulation)
-      const existingUser = localStorage.getItem('kisanmitra_user');
+      // Store user data and navigate
+      localStorage.setItem('kisanmitra_user', JSON.stringify({
+        mobile: formData.mobile,
+        name: 'Farmer'
+      }));
       
-      if (existingUser) {
-        toast({
-          title: `Welcome back! 🌾`,
-          description: "You're successfully logged in",
-        });
-        navigate('/home');
-      } else {
-        toast({
-          title: "Account not found",
-          description: "Please check your credentials or create a new account",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: `Welcome back! 🌾`,
+        description: "Successfully logged in",
+      });
+      navigate('/home');
       setLoading(false);
     }, 1500);
   };
 
-  // Get background based on time
-  const getTimeBasedBackground = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) {
-      return 'bg-gradient-to-br from-orange-50 to-yellow-50';
-    } else if (hour < 17) {
-      return 'bg-gradient-to-br from-blue-50 to-cyan-50';
-    } else {
-      return 'bg-gradient-to-br from-purple-50 to-pink-50';
-    }
-  };
-
   return (
-    <div className="mobile-container">
-      {/* Dynamic Background */}
-      <div className={`absolute inset-0 ${getTimeBasedBackground()} transition-all duration-1000`}>
-        {/* Floating crop illustrations */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute opacity-20"
-              style={{
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%',
-                animationDelay: Math.random() * 4 + 's',
-              }}
-            >
-              <Sprout 
-                className={`w-8 h-8 text-agri-primary float-animation`}
-                style={{ 
-                  animationDuration: (Math.random() * 2 + 3) + 's' 
-                }}
-              />
-            </div>
-          ))}
-        </div>
+    <div className="mobile-container min-h-screen bg-gradient-to-br from-agri-light to-white">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23059669' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
       </div>
 
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header Section */}
-        <div className="text-center pt-16 pb-12 px-6">
-          <div className="mb-6 animate-fade-in">
-            <TimeIcon className={`w-16 h-16 ${color} mx-auto mb-4`} />
+        {/* Top Bar */}
+        <div className="flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-agri-primary rounded-xl flex items-center justify-center">
+              <Sprout className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-agri-primary">KisanMitra</h1>
+              <p className="text-xs text-agri-gray">Smart Farming Assistant</p>
+            </div>
           </div>
-          
-          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-4xl font-bold text-agri-accent mb-3">
-              Welcome Back! 👋
-            </h1>
-            <p className="text-xl text-agri-secondary font-medium">
-              {greeting}, Ready to Continue?
-            </p>
-            <p className="text-agri-secondary/70 mt-2">
-              Continue Your Farming Journey
-            </p>
+          <LanguageSwitcher />
+        </div>
+
+        {/* Header */}
+        <div className="text-center px-6 pt-8 pb-6">
+          <div className="w-20 h-20 bg-agri-primary rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg">
+            <User className="w-10 h-10 text-white" />
           </div>
+          <h1 className="text-3xl font-bold text-agri-primary mb-2">
+            🙏 Welcome Back, Farmer
+          </h1>
+          <p className="text-lg text-agri-gray">
+            Continue your farming journey
+          </p>
         </div>
 
         {/* Form Container */}
         <div className="flex-1 px-6">
-          <div className="glass-card rounded-3xl p-8 border border-agri-primary/20 shadow-large animate-slide-up">
-            <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="bg-white rounded-3xl p-6 shadow-large border border-agri-primary/10">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Mobile Number */}
               <div className="space-y-3">
-                <label className="text-sm font-semibold text-agri-accent flex items-center">
-                  <Phone className="w-4 h-4 mr-2 text-agri-primary" />
+                <label className="text-lg font-bold text-agri-primary flex items-center">
+                  <Phone className="w-6 h-6 mr-3 text-agri-primary" />
                   Mobile Number
                 </label>
                 <div className="relative">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center">
-                    <span className="text-agri-accent font-medium">🇮🇳 +91</span>
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center bg-agri-light rounded-lg px-3 py-2">
+                    <span className="text-agri-primary font-bold text-lg">🇮🇳 +91</span>
                   </div>
                   <Input
                     type="tel"
-                    placeholder="Enter your mobile number"
+                    placeholder="Enter 10 digit mobile"
                     value={formData.mobile}
                     onChange={handleMobileChange}
-                    maxLength={11}
-                    className="pl-20 h-16 border-agri-primary/20 focus:border-agri-primary transition-all duration-300 text-lg"
+                    maxLength={10}
+                    className="pl-24 pr-4 h-20 border-2 border-agri-primary/30 focus:border-agri-primary rounded-2xl text-2xl font-bold text-center tracking-wider bg-agri-light/30"
                   />
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-8 h-8 rounded-full bg-agri-light flex items-center justify-center">
-                      <Phone className="w-4 h-4 text-agri-primary animate-pulse" />
-                    </div>
-                  </div>
                 </div>
               </div>
 
               {/* PIN Entry */}
               <div className="space-y-3">
-                <label className="text-sm font-semibold text-agri-accent flex items-center">
-                  <Lock className="w-4 h-4 mr-2 text-agri-primary" />
-                  Secure PIN
+                <label className="text-lg font-bold text-agri-primary flex items-center">
+                  <Lock className="w-6 h-6 mr-3 text-agri-primary" />
+                  4-Digit PIN
                 </label>
                 <div className="relative">
                   <Input
                     type={showPin ? "text" : "password"}
-                    placeholder="Enter your 4-digit PIN"
+                    placeholder="Enter PIN"
                     value={formData.pin}
                     onChange={(e) => setFormData(prev => ({ 
                       ...prev, 
                       pin: e.target.value.replace(/\D/g, '').slice(0, 4) 
                     }))}
                     maxLength={4}
-                    className="pl-16 pr-16 h-16 border-agri-primary/20 focus:border-agri-primary transition-all duration-300 text-center tracking-[0.5em] text-2xl font-bold"
+                    className="pl-4 pr-20 h-20 border-2 border-agri-primary/30 focus:border-agri-primary rounded-2xl text-center text-3xl font-bold tracking-[0.8em] bg-agri-light/30"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-8 h-8 rounded-full bg-agri-light flex items-center justify-center">
-                      <Lock className="w-4 h-4 text-agri-primary" />
-                    </div>
-                  </div>
                   <button
                     type="button"
                     onClick={() => setShowPin(!showPin)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full hover:bg-agri-light transition-colors"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 rounded-xl hover:bg-agri-light transition-colors"
                   >
                     {showPin ? (
-                      <EyeOff className="w-5 h-5 text-agri-gray" />
+                      <EyeOff className="w-8 h-8 text-agri-primary" />
                     ) : (
-                      <Eye className="w-5 h-5 text-agri-gray" />
+                      <Eye className="w-8 h-8 text-agri-primary" />
                     )}
                   </button>
                 </div>
 
                 {/* PIN dots indicator */}
-                <div className="flex justify-center space-x-3 mt-4">
+                <div className="flex justify-center space-x-4 mt-4">
                   {[...Array(4)].map((_, i) => (
                     <div
                       key={i}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      className={`w-4 h-4 rounded-full transition-all duration-300 ${
                         i < formData.pin.length 
-                          ? 'bg-agri-primary shadow-glow scale-125' 
-                          : 'bg-agri-light-gray'
+                          ? 'bg-agri-primary scale-125' 
+                          : 'bg-agri-light'
                       }`}
                     />
                   ))}
@@ -228,30 +181,30 @@ const Login = () => {
               {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full h-16 btn-primary text-xl font-semibold bg-agri-primary hover:bg-agri-secondary text-white shadow-large"
+                disabled={loading || !formData.mobile || !formData.pin}
+                className="w-full h-20 bg-agri-primary hover:bg-agri-secondary text-white font-bold text-2xl rounded-2xl shadow-large disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Logging you in...</span>
+                    <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Logging in...</span>
                   </div>
                 ) : (
                   <div className="flex items-center space-x-3">
-                    <Sprout className="w-6 h-6" />
-                    <span>Welcome Back to KisanMitra</span>
+                    <Sprout className="w-8 h-8" />
+                    <span>Login to KisanMitra</span>
                   </div>
                 )}
               </Button>
 
               {/* Signup Link */}
-              <div className="text-center pt-6">
+              <div className="text-center pt-4">
                 <button
                   type="button"
                   onClick={() => navigate('/signup')}
-                  className="text-agri-primary font-semibold hover:text-agri-secondary transition-colors text-lg"
+                  className="text-agri-primary font-bold text-xl hover:text-agri-secondary transition-colors"
                 >
-                  New to farming innovation? Join us! 🚀
+                  New to KisanMitra? Create Account →
                 </button>
               </div>
             </form>
@@ -259,7 +212,7 @@ const Login = () => {
         </div>
 
         {/* Bottom Spacing */}
-        <div className="h-8" />
+        <div className="h-6" />
       </div>
     </div>
   );

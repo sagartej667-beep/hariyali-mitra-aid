@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff, User, Phone, MapPin, Lock, Sprout } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const indianStates = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
@@ -21,25 +21,27 @@ const Signup = () => {
     mobile: "",
     state: "",
     district: "",
-    pin: ""
+    pin: "",
+    confirmPin: ""
   });
   const [loading, setLoading] = useState(false);
   const [showPin, setShowPin] = useState(false);
+  const [showConfirmPin, setShowConfirmPin] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
-    if (field === "mobile") {
-      value = formatMobile(value);
+    if (field === "name") {
+      // Only allow alphabets and spaces
+      value = value.replace(/[^A-Za-z\s]/g, "");
     }
-    if (field === "pin" && value.length > 4) {
+    if (field === "mobile") {
+      // Only allow digits, max 10
+      value = value.replace(/\D/g, "").slice(0, 10);
+    }
+    if ((field === "pin" || field === "confirmPin") && value.length > 4) {
       return;
     }
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const formatMobile = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-    return cleaned.slice(0, 10);
   };
 
   const isFormValid = () => {
@@ -47,16 +49,27 @@ const Signup = () => {
            formData.mobile.length === 10 &&
            formData.state !== "" &&
            formData.district.trim() !== "" &&
-           formData.pin.length === 4;
+           formData.pin.length === 4 &&
+           formData.confirmPin.length === 4 &&
+           formData.pin === formData.confirmPin;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (formData.pin !== formData.confirmPin) {
+      toast({
+        title: "PIN Mismatch",
+        description: "PIN and Confirm PIN must match",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (!isFormValid()) {
       toast({
-        title: "Please fill all fields",
-        description: "All fields are required to create your account",
+        title: "Missing Information",
+        description: "Please fill all required fields",
         variant: "destructive"
       });
       return;
@@ -68,20 +81,25 @@ const Signup = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
+      // Store user data
+      localStorage.setItem('kisanmitra_user', JSON.stringify({
+        name: formData.name,
+        mobile: formData.mobile,
+        state: formData.state,
+        district: formData.district
+      }));
+      
       toast({
-        title: "Account created successfully! 🎉",
-        description: `Welcome to KisanMitra, ${formData.name}! You can now access all farming features.`,
+        title: "Account Created! 🎉",
+        description: `Welcome to KisanMitra, ${formData.name}!`,
       });
       
-      // Navigate to home or login
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      navigate("/home");
       
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: "Please try again later",
+        description: "Please try again",
         variant: "destructive"
       });
     } finally {
@@ -90,183 +108,213 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-agri-light to-background relative overflow-hidden">
-      {/* Subtle Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-10 -left-10 w-72 h-72 bg-agri-primary/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-agri-secondary/10 rounded-full blur-3xl"></div>
+    <div className="mobile-container min-h-screen bg-gradient-to-br from-agri-light to-white overflow-y-auto">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23059669' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
       </div>
 
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-6">
-        <div className="w-full max-w-md">
-          {/* Header with Farming Icon */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-agri-primary rounded-2xl mb-6 shadow-lg">
-              <Sprout className="w-10 h-10 text-white" />
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Top Bar */}
+        <div className="flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-agri-primary rounded-xl flex items-center justify-center">
+              <Sprout className="w-6 h-6 text-white" />
             </div>
-            
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Create Your Account
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Join thousands of smart farmers
-            </p>
+            <div>
+              <h1 className="text-lg font-bold text-agri-primary">KisanMitra</h1>
+              <p className="text-xs text-agri-gray">Smart Farming Assistant</p>
+            </div>
           </div>
+          <LanguageSwitcher />
+        </div>
+
+        {/* Header */}
+        <div className="text-center px-6 pt-4 pb-6">
+          <div className="w-20 h-20 bg-agri-primary rounded-3xl mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <Sprout className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-agri-primary mb-2">
+            🌱 Join 50,000+ Smart Farmers
+          </h1>
+          <p className="text-lg text-agri-gray">
+            Create your farming account
+          </p>
+        </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="bg-card rounded-2xl p-8 shadow-large border border-border/50">
-              {/* Name Field */}
-              <div className="space-y-3 mb-6">
-                <Label htmlFor="name" className="text-base font-medium text-foreground">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <User className="w-5 h-5 text-muted-foreground" />
-                  </div>
+          <div className="flex-1 px-6">
+            <div className="bg-white rounded-3xl p-6 shadow-large border border-agri-primary/10">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Name Field */}
+                <div className="space-y-2">
+                  <label className="text-lg font-bold text-agri-primary flex items-center">
+                    <User className="w-6 h-6 mr-3" />
+                    Full Name
+                  </label>
                   <Input
-                    id="name"
                     type="text"
-                    placeholder="Enter your full name"
+                    placeholder="Enter your name (alphabets only)"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="pl-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="h-16 text-xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-semibold"
                   />
                 </div>
-              </div>
 
-              {/* Mobile Field */}
-              <div className="space-y-3 mb-6">
-                <Label htmlFor="mobile" className="text-base font-medium text-foreground">
-                  Mobile Number
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <span className="text-muted-foreground text-base font-medium">+91</span>
-                    <Phone className="w-5 h-5 text-muted-foreground ml-2" />
-                  </div>
-                  <Input
-                    id="mobile"
-                    type="tel"
-                    placeholder="Enter your mobile number"
-                    value={formData.mobile}
-                    onChange={(e) => handleInputChange("mobile", e.target.value)}
-                    className="pl-20 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* State Field */}
-              <div className="space-y-3 mb-6">
-                <Label htmlFor="state" className="text-base font-medium text-foreground">
-                  State
-                </Label>
-                <Select onValueChange={(value) => handleInputChange("state", value)}>
-                  <SelectTrigger className="h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-                    <div className="flex items-center">
-                      <MapPin className="w-5 h-5 text-muted-foreground mr-3" />
-                      <SelectValue placeholder="Select your state" />
+                {/* Mobile Field */}
+                <div className="space-y-2">
+                  <label className="text-lg font-bold text-agri-primary flex items-center">
+                    <Phone className="w-6 h-6 mr-3" />
+                    Mobile Number
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-agri-light rounded-lg px-3 py-2">
+                      <span className="text-agri-primary font-bold text-lg">🇮🇳 +91</span>
                     </div>
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border border-border shadow-large rounded-lg">
-                    {indianStates.map((state) => (
-                      <SelectItem 
-                        key={state} 
-                        value={state}
-                        className="text-base py-3 px-4 hover:bg-accent focus:bg-accent"
-                      >
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* District Field */}
-              <div className="space-y-3 mb-6">
-                <Label htmlFor="district" className="text-base font-medium text-foreground">
-                  District
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <MapPin className="w-5 h-5 text-muted-foreground" />
+                    <Input
+                      type="tel"
+                      placeholder="10 digits only"
+                      value={formData.mobile}
+                      onChange={(e) => handleInputChange("mobile", e.target.value)}
+                      maxLength={10}
+                      className="pl-24 h-16 text-xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-bold text-center tracking-wider"
+                    />
                   </div>
+                </div>
+
+                {/* State Field */}
+                <div className="space-y-2">
+                  <label className="text-lg font-bold text-agri-primary flex items-center">
+                    <MapPin className="w-6 h-6 mr-3" />
+                    State
+                  </label>
+                  <Select onValueChange={(value) => handleInputChange("state", value)}>
+                    <SelectTrigger className="h-16 text-xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-semibold">
+                      <SelectValue placeholder="Select your state" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white border border-agri-primary/20 shadow-large rounded-lg max-h-48">
+                      {indianStates.map((state) => (
+                        <SelectItem 
+                          key={state} 
+                          value={state}
+                          className="text-lg py-3 px-4 hover:bg-agri-light"
+                        >
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* District Field */}
+                <div className="space-y-2">
+                  <label className="text-lg font-bold text-agri-primary flex items-center">
+                    <MapPin className="w-6 h-6 mr-3" />
+                    District
+                  </label>
                   <Input
-                    id="district"
                     type="text"
-                    placeholder="Enter your district"
+                    placeholder="Enter your district name"
                     value={formData.district}
                     onChange={(e) => handleInputChange("district", e.target.value)}
-                    className="pl-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="h-16 text-xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-semibold"
                   />
                 </div>
-              </div>
 
-              {/* PIN Field */}
-              <div className="space-y-3 mb-8">
-                <Label htmlFor="pin" className="text-base font-medium text-foreground">
-                  4-Digit PIN
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="w-5 h-5 text-muted-foreground" />
+                {/* PIN Fields */}
+                <div className="grid grid-cols-1 gap-4">
+                  {/* PIN */}
+                  <div className="space-y-2">
+                    <label className="text-lg font-bold text-agri-primary flex items-center">
+                      <Lock className="w-6 h-6 mr-3" />
+                      4-Digit PIN
+                    </label>
+                    <div className="relative">
+                      <Input
+                        type={showPin ? "text" : "password"}
+                        placeholder="Create PIN"
+                        value={formData.pin}
+                        onChange={(e) => handleInputChange("pin", e.target.value)}
+                        maxLength={4}
+                        className="pr-16 h-16 text-2xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-bold text-center tracking-[0.8em]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPin(!showPin)}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2"
+                      >
+                        {showPin ? (
+                          <EyeOff className="w-6 h-6 text-agri-primary" />
+                        ) : (
+                          <Eye className="w-6 h-6 text-agri-primary" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                  <Input
-                    id="pin"
-                    type={showPin ? "text" : "password"}
-                    placeholder="Create 4-digit PIN"
-                    value={formData.pin}
-                    onChange={(e) => handleInputChange("pin", e.target.value)}
-                    className="pl-12 pr-12 h-14 text-base rounded-xl border-2 border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono tracking-wider text-center"
-                    maxLength={4}
-                    inputMode="numeric"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPin(!showPin)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center hover:scale-110 transition-transform"
-                  >
-                    {showPin ? (
-                      <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                    ) : (
-                      <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                    )}
-                  </button>
+
+                  {/* Confirm PIN */}
+                  <div className="space-y-2">
+                    <label className="text-lg font-bold text-agri-primary flex items-center">
+                      <Lock className="w-6 h-6 mr-3" />
+                      Confirm PIN
+                    </label>
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPin ? "text" : "password"}
+                        placeholder="Confirm PIN"
+                        value={formData.confirmPin}
+                        onChange={(e) => handleInputChange("confirmPin", e.target.value)}
+                        maxLength={4}
+                        className="pr-16 h-16 text-2xl rounded-2xl border-2 border-agri-primary/30 focus:border-agri-primary bg-agri-light/30 font-bold text-center tracking-[0.8em]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPin(!showConfirmPin)}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2"
+                      >
+                        {showConfirmPin ? (
+                          <EyeOff className="w-6 h-6 text-agri-primary" />
+                        ) : (
+                          <Eye className="w-6 h-6 text-agri-primary" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={!isFormValid() || loading}
-                className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg rounded-xl shadow-medium hover:shadow-large transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-foreground mr-3"></div>
-                    Creating Account...
-                  </div>
-                ) : (
-                  "Create My Account"
-                )}
-              </Button>
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  disabled={!isFormValid() || loading}
+                  className="w-full h-20 bg-agri-primary hover:bg-agri-secondary text-white font-bold text-2xl rounded-2xl shadow-large mt-6 disabled:opacity-50"
+                >
+                  {loading ? (
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Creating Account...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-3">
+                      <Sprout className="w-8 h-8" />
+                      <span>Create My Account</span>
+                    </div>
+                  )}
+                </Button>
+              </form>
             </div>
-          </form>
 
-          {/* Login Link */}
-          <div className="text-center mt-8">
-            <p className="text-muted-foreground text-base">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-primary hover:text-primary/80 font-semibold hover:underline transition-colors text-base"
+            {/* Login Link */}
+            <div className="text-center mt-6 mb-6">
+              <button
+                onClick={() => navigate('/login')}
+                className="text-agri-primary font-bold text-xl hover:text-agri-secondary transition-colors"
               >
-                Login
-              </Link>
-            </p>
+                Already have an account? Login →
+              </button>
+            </div>
           </div>
-        </div>
       </div>
     </div>
   );
