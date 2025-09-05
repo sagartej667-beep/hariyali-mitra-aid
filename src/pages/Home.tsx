@@ -156,66 +156,62 @@ const Home = () => {
 
       {/* Content */}
       <div className="mobile-content space-y-6 pt-4">
-        {/* Weather Card */}
-        <Card className="weather-card border-0 shadow-large">
-          <CardContent className="p-6">
-            {/* Location Header */}
-            <div className="flex items-center justify-between mb-4">
+        {/* Weather Card - Compact */}
+        <Card className="weather-card border-0 shadow-medium">
+          <CardContent className="p-4">
+            {/* Header with location and more info */}
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4 text-blue-700" />
+                <MapPin className="w-4 h-4 text-blue-600" />
                 <span className="text-sm font-medium text-blue-800">Pune, Maharashtra</span>
               </div>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="bg-white/70 border-blue-200 hover:bg-white text-blue-700 text-xs"
-                onClick={() => navigate('/weather')}
-              >
-                More Info
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="text-blue-700 hover:bg-blue-50 p-1 h-6"
+                  onClick={() => {/* Voice function */}}
+                >
+                  <Volume2 className="w-4 h-4" />
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="bg-white/70 border-blue-200 hover:bg-white text-blue-700 text-xs h-6 px-2"
+                  onClick={() => navigate('/weather')}
+                >
+                  More
+                </Button>
+              </div>
             </div>
 
-            {/* Weather Info */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-14 h-14 bg-white/60 rounded-2xl flex items-center justify-center">
-                  <Cloud className="w-8 h-8 text-blue-600" />
+            {/* Compact weather display */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-white/60 rounded-xl flex items-center justify-center">
+                  <Cloud className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-blue-900">30°C</div>
-                  <div className="text-lg text-blue-800">Partly Cloudy</div>
+                  <div className="text-2xl font-bold text-blue-900">30°C</div>
+                  <div className="text-sm text-blue-700">Partly Cloudy</div>
                 </div>
               </div>
-              <div className="text-right space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Thermometer className="w-4 h-4 text-yellow-600" />
-                  <span className="text-sm text-blue-700 font-medium">32°/24°</span>
+              <div className="text-right space-y-1">
+                <div className="flex items-center space-x-1">
+                  <Thermometer className="w-3 h-3 text-yellow-600" />
+                  <span className="text-xs text-blue-700">32°/24°</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Droplets className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm text-blue-700 font-medium">15%</span>
+                <div className="flex items-center space-x-1">
+                  <Droplets className="w-3 h-3 text-blue-600" />
+                  <span className="text-xs text-blue-700">15%</span>
                 </div>
               </div>
             </div>
 
-            {/* Inline Weather Alert */}
-            <div className="bg-orange-100 border border-orange-200 rounded-lg p-3 mb-4">
-              <div className="flex items-center space-x-3">
-                <CloudRain className="w-5 h-5 text-orange-600" />
-                <span className="text-sm font-medium text-orange-800">Rain expected today – avoid spraying</span>
-              </div>
-            </div>
-
-            {/* Voice Button */}
-            <div className="flex justify-end">
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                className="text-blue-700 hover:bg-blue-50 p-2"
-                onClick={() => {/* Voice function */}}
-              >
-                <Volume2 className="w-5 h-5" />
-              </Button>
+            {/* Compact inline alert */}
+            <div className="bg-orange-100 border border-orange-200 rounded-lg p-2 mt-3 flex items-center space-x-2">
+              <CloudRain className="w-4 h-4 text-orange-600 flex-shrink-0" />
+              <span className="text-xs font-medium text-orange-800">Rain expected today – avoid spraying</span>
             </div>
           </CardContent>
         </Card>
