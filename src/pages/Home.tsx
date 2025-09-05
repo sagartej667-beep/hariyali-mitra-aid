@@ -24,7 +24,14 @@ import {
   TestTube,
   Beaker,
   IndianRupee,
-  ArrowRight
+  ArrowRight,
+  Volume2,
+  BookOpen,
+  BarChart3,
+  List,
+  ChevronRight,
+  CloudRain,
+  Thermometer
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -149,45 +156,245 @@ const Home = () => {
 
       {/* Content */}
       <div className="mobile-content space-y-6 pt-4">
-        {/* Weather & Advisory Section */}
-        <div className="space-y-4">
-          {/* Weather Alert Banner */}
-          <div className="bg-orange-50 border-l-4 border-orange-400 rounded-xl p-4">
-            <div className="flex items-center space-x-3">
-              <AlertTriangle className="w-6 h-6 text-orange-600" />
-              <div>
-                <h3 className="font-bold text-orange-900 text-sm">Weather Alert</h3>
-                <p className="text-orange-800 text-sm">Rain expected – avoid spraying today</p>
+        {/* Weather Card */}
+        <Card className="weather-card border-0 shadow-large">
+          <CardContent className="p-6">
+            {/* Location Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-2">
+                <MapPin className="w-4 h-4 text-blue-700" />
+                <span className="text-sm font-medium text-blue-800">Pune, Maharashtra</span>
+              </div>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="bg-white/70 border-blue-200 hover:bg-white text-blue-700 text-xs"
+                onClick={() => navigate('/weather')}
+              >
+                More Info
+              </Button>
+            </div>
+
+            {/* Weather Info */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-4">
+                <div className="w-14 h-14 bg-white/60 rounded-2xl flex items-center justify-center">
+                  <Cloud className="w-8 h-8 text-blue-600" />
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-blue-900">30°C</div>
+                  <div className="text-lg text-blue-800">Partly Cloudy</div>
+                </div>
+              </div>
+              <div className="text-right space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Thermometer className="w-4 h-4 text-yellow-600" />
+                  <span className="text-sm text-blue-700 font-medium">32°/24°</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Droplets className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm text-blue-700 font-medium">15%</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Weather Card */}
-          <Card className="weather-card border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-white/50 rounded-2xl flex items-center justify-center">
-                    <Cloud className="w-7 h-7 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-blue-900">28°C</div>
-                    <div className="text-lg text-blue-800">Partly Cloudy</div>
-                  </div>
+            {/* Inline Weather Alert */}
+            <div className="bg-orange-100 border border-orange-200 rounded-lg p-3 mb-4">
+              <div className="flex items-center space-x-3">
+                <CloudRain className="w-5 h-5 text-orange-600" />
+                <span className="text-sm font-medium text-orange-800">Rain expected today – avoid spraying</span>
+              </div>
+            </div>
+
+            {/* Voice Button */}
+            <div className="flex justify-end">
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                className="text-blue-700 hover:bg-blue-50 p-2"
+                onClick={() => {/* Voice function */}}
+              >
+                <Volume2 className="w-5 h-5" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* AI Plant Diagnosis - Main CTA */}
+        <div className="relative overflow-hidden rounded-2xl bg-agri-primary p-6 text-white shadow-large">
+          <div className="absolute top-4 left-4">
+            <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+              <span className="text-xs font-semibold">AI Powered</span>
+            </div>
+          </div>
+          
+          <div className="relative z-10 mt-8">
+            <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+              <Camera className="w-7 h-7" />
+              <span>Diagnose Crop Disease</span>
+            </h3>
+            <p className="text-white/90 mb-6 text-lg">Upload Photo → Detect Disease</p>
+            
+            <Button 
+              onClick={() => navigate('/diagnose')}
+              className="bg-white text-agri-primary hover:bg-white/90 font-bold text-lg py-3 px-6 flex items-center space-x-2"
+            >
+              <Camera className="w-6 h-6" />
+              <span>Start Diagnosis</span>
+            </Button>
+          </div>
+          
+          {/* Background decoration */}
+          <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full" />
+          <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/5 rounded-full" />
+        </div>
+
+        {/* Soil & Fertilizer Cards */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-text-secondary">🧪 Soil & Fertilizer</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/soil-health')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <TestTube className="w-6 h-6 text-amber-700" />
                 </div>
-                <div className="text-right space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <Sun className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm text-blue-700">32°/24°</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Droplets className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-700">15%</span>
-                  </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Soil Health</h3>
+                <p className="text-agri-gray text-xs">Check Soil Health →</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/fertilizer-guide')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-agri-light rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <Beaker className="w-6 h-6 text-agri-primary" />
                 </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Fertilizer Guide</h3>
+                <p className="text-agri-gray text-xs">Get Fertilizer Advice →</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Marketplace Section */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-text-secondary">🛒 Marketplace</h2>
+          
+          {/* Market Prices Preview */}
+          <Card className="plant-card">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-text-secondary">Today's Mandi Prices</h3>
+                <TrendingUp className="w-5 h-5 text-agri-success" />
+              </div>
+              <div className="space-y-2 mb-4">
+                {marketPrices.slice(0, 3).map((item, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <span className="text-sm text-agri-gray">{item.crop}</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-text-secondary">{item.price}</span>
+                      <div className={`w-2 h-2 rounded-full ${item.trend === 'up' ? 'bg-agri-success' : 'bg-agri-danger'}`} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Marketplace Action Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => navigate('/market-prices')}
+                  className="flex items-center space-x-2 justify-center"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span>See All Prices</span>
+                </Button>
+                <Button 
+                  size="sm" 
+                  onClick={() => navigate('/sell')}
+                  className="bg-agri-success hover:bg-agri-success/90 flex items-center space-x-2 justify-center"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span>Sell Crops</span>
+                </Button>
               </div>
             </CardContent>
           </Card>
+          
+          {/* Additional Marketplace Cards */}
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/shop')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <ShoppingCart className="w-6 h-6 text-orange-600" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Order Fertilizers</h3>
+                <p className="text-agri-gray text-xs">Shop nutrients</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/shops')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-agri-light-purple rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <MapPin className="w-6 h-6 text-agri-purple" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Nearby Shops</h3>
+                <p className="text-agri-gray text-xs">Find agri stores</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* My Farm Section - 4 Cards */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-text-secondary">🌱 My Farm</h2>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/treatments')}>
+              <CardContent className="p-4 text-center relative">
+                <div className="absolute -top-2 -right-2 z-10">
+                  <div className="bg-agri-danger text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] h-6 flex items-center justify-center">
+                    2
+                  </div>
+                </div>
+                <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <Activity className="w-6 h-6 text-red-600" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Active Treatments</h3>
+                <p className="text-agri-gray text-xs">Track ongoing sprays</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/guides')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-agri-light rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <BookOpen className="w-6 h-6 text-agri-primary" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">Cultivation Guides</h3>
+                <p className="text-agri-gray text-xs">Seasonal practices</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/orders')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-agri-light-blue rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <Package className="w-6 h-6 text-agri-info" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">My Orders</h3>
+                <p className="text-agri-gray text-xs">Track fertilizer purchases</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="plant-card cursor-pointer" onClick={() => navigate('/listings')}>
+              <CardContent className="p-4 text-center">
+                <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center mb-3 mx-auto">
+                  <List className="w-6 h-6 text-yellow-600" />
+                </div>
+                <h3 className="font-semibold text-text-secondary text-sm mb-1">My Listings</h3>
+                <p className="text-agri-gray text-xs">Track crops for selling</p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Today's Farming Tip */}
@@ -206,213 +413,45 @@ const Home = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Soil & Fertilizer Section */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-text-secondary">Soil & Fertilizer</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Card className="plant-card cursor-pointer" onClick={() => navigate('/soil-health')}>
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-brown-50 rounded-xl flex items-center justify-center mb-3 mx-auto">
-                  <TestTube className="w-6 h-6 text-amber-700" />
-                </div>
-                <h3 className="font-semibold text-text-secondary text-sm mb-1">Soil Health</h3>
-                <p className="text-agri-gray text-xs">Check soil →</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="plant-card cursor-pointer" onClick={() => navigate('/fertilizer-guide')}>
-              <CardContent className="p-4 text-center">
-                <div className="w-12 h-12 bg-agri-light rounded-xl flex items-center justify-center mb-3 mx-auto">
-                  <Beaker className="w-6 h-6 text-agri-primary" />
-                </div>
-                <h3 className="font-semibold text-text-secondary text-sm mb-1">Fertilizer Guide</h3>
-                <p className="text-agri-gray text-xs">Get advice →</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Marketplace Section */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-text-secondary">Marketplace</h2>
-          
-          {/* Market Prices */}
-          <Card className="plant-card">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-text-secondary">Today's Mandi Prices</h3>
-                <TrendingUp className="w-5 h-5 text-agri-success" />
-              </div>
-              <div className="space-y-2">
-                {marketPrices.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm text-agri-gray">{item.crop}</span>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-text-secondary">{item.price}</span>
-                      <div className={`w-2 h-2 rounded-full ${item.trend === 'up' ? 'bg-agri-success' : 'bg-agri-danger'}`} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Marketplace Actions */}
-          <div className="grid grid-cols-2 gap-4">
-            {quickActions.map((action) => (
-              <Card
-                key={action.id}
-                className="plant-card cursor-pointer transition-all duration-300 transform hover:scale-105"
-                onClick={action.action}
-              >
-                <CardContent className="p-4 text-center relative">
-                  {action.badge && (
-                    <div className="absolute -top-2 -right-2 z-10">
-                      <div className="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                        {action.badge}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className={`w-12 h-12 ${action.bgColor} rounded-xl flex items-center justify-center mb-3 mx-auto`}>
-                    <action.icon className={`w-6 h-6 ${action.iconColor}`} />
-                  </div>
-                  
-                  <h3 className="font-semibold text-text-secondary text-sm mb-1">{action.title}</h3>
-                  <p className="text-agri-gray text-xs">{action.subtitle}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* My Farm Section */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-text-secondary">My Farm</h2>
-          
-          {/* AI Diagnosis Feature */}
-          <div className="relative overflow-hidden rounded-2xl bg-agri-primary p-6 text-white shadow-large">
-            <div className="absolute top-4 left-4">
-              <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-xs font-semibold">AI Powered</span>
-              </div>
-            </div>
-            
-            <div className="relative z-10 mt-8">
-              <h3 className="text-xl font-bold mb-2">AI Plant Diagnosis</h3>
-              <p className="text-white/90 mb-6">Upload Photo → Detect Disease</p>
-              
-              <Button 
-                onClick={() => navigate('/diagnose')}
-                className="bg-white text-agri-primary hover:bg-white/90 font-semibold flex items-center space-x-2"
-              >
-                <Camera className="w-5 h-5" />
-                <span>Start Diagnosis</span>
-              </Button>
-            </div>
-            
-            {/* Background decoration */}
-            <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full" />
-          </div>
-          
-          {/* Farm Actions */}
-          <div className="grid grid-cols-2 gap-4">
-            {farmActions.map((action) => (
-              <Card
-                key={action.id}
-                className="plant-card cursor-pointer transition-all duration-300 transform hover:scale-105"
-                onClick={action.action}
-              >
-                <CardContent className="p-4 text-center relative">
-                  {action.badge && (
-                    <div className="absolute -top-2 -right-2 z-10">
-                      <div className="bg-agri-danger text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] h-6 flex items-center justify-center">
-                        {action.badge}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className={`w-12 h-12 ${action.bgColor} rounded-xl flex items-center justify-center mb-3 mx-auto`}>
-                    <action.icon className={`w-6 h-6 ${action.iconColor}`} />
-                  </div>
-                  
-                  <h3 className="font-semibold text-text-secondary text-sm mb-1">{action.title}</h3>
-                  <p className="text-agri-gray text-xs">{action.subtitle}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-
-        {/* Recent Activity */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-text-secondary">Recent Activity</h2>
-          
-          <div className="space-y-3">
-            <Card className="plant-card">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-agri-light rounded-lg flex items-center justify-center">
-                    <Leaf className="w-5 h-5 text-agri-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-text-secondary">Tomato disease diagnosed</p>
-                    <p className="text-sm text-agri-gray">2 hours ago</p>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-agri-gray" />
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="plant-card">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <Package className="w-5 h-5 text-blue-500" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-text-secondary">Fertilizer order delivered</p>
-                    <p className="text-sm text-agri-gray">Yesterday</p>
-                  </div>
-                  <CheckCircle className="w-5 h-5 text-agri-success" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
 
-      {/* Bottom Navigation - Only 4 Tabs */}
+      {/* Bottom Navigation - 5 Tabs */}
       <div className="mobile-bottom-nav">
-        <div className="flex items-center justify-around py-4">
-          <button className="flex flex-col items-center space-y-1 px-4 py-2">
-            <HomeIcon className="w-7 h-7 text-agri-primary" />
+        <div className="flex items-center justify-between px-2 py-3">
+          <button className="flex flex-col items-center space-y-1 px-3 py-2 min-w-0">
+            <HomeIcon className="w-6 h-6 text-agri-primary" />
             <span className="text-xs font-medium text-agri-primary">Home</span>
           </button>
           
           <button 
             onClick={() => navigate('/diagnose')}
-            className="flex flex-col items-center space-y-1 px-4 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg min-w-0"
           >
-            <Camera className="w-7 h-7 text-agri-gray" />
+            <Camera className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Diagnose</span>
           </button>
           
           <button 
-            onClick={() => navigate('/shop')}
-            className="flex flex-col items-center space-y-1 px-4 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
+            onClick={() => navigate('/advisory')}
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg min-w-0"
           >
-            <Store className="w-7 h-7 text-agri-gray" />
+            <BookOpen className="w-6 h-6 text-agri-gray" />
+            <span className="text-xs text-agri-gray">Advisory</span>
+          </button>
+          
+          <button 
+            onClick={() => navigate('/shop')}
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg min-w-0"
+          >
+            <Store className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Shop</span>
           </button>
           
           <button 
             onClick={() => navigate('/profile')}
-            className="flex flex-col items-center space-y-1 px-4 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg"
+            className="flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 hover:bg-agri-light rounded-lg min-w-0"
           >
-            <User className="w-7 h-7 text-agri-gray" />
+            <User className="w-6 h-6 text-agri-gray" />
             <span className="text-xs text-agri-gray">Profile</span>
           </button>
         </div>
