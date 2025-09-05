@@ -216,34 +216,43 @@ const Home = () => {
           </CardContent>
         </Card>
 
-        {/* AI Plant Diagnosis - Main CTA */}
-        <div className="relative overflow-hidden rounded-2xl bg-agri-primary p-6 text-white shadow-large">
-          <div className="absolute top-4 left-4">
-            <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-              <span className="text-xs font-semibold">AI Powered</span>
+        {/* Today's Farming Tip - Moved up for better visibility */}
+        <Card className="tip-card border-0">
+          <CardContent className="p-4">
+            <div className="flex items-start space-x-3">
+              <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-yellow-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-amber-900 text-base mb-1">Today's Farming Tip</h3>
+                <p className="text-amber-800 text-sm leading-relaxed">
+                  Early morning (6-8 AM) is optimal for pesticide application - calm winds reduce drift.
+                </p>
+              </div>
             </div>
-          </div>
-          
-          <div className="relative z-10 mt-8">
-            <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
-              <Camera className="w-7 h-7" />
-              <span>Diagnose Crop Disease</span>
-            </h3>
-            <p className="text-white/90 mb-6 text-lg">Upload Photo → Detect Disease</p>
-            
-            <Button 
-              onClick={() => navigate('/diagnose')}
-              className="bg-white text-agri-primary hover:bg-white/90 font-bold text-lg py-3 px-6 flex items-center space-x-2"
-            >
-              <Camera className="w-6 h-6" />
-              <span>Start Diagnosis</span>
-            </Button>
-          </div>
-          
-          {/* Background decoration */}
-          <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full" />
-          <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/5 rounded-full" />
-        </div>
+          </CardContent>
+        </Card>
+
+        {/* AI Plant Diagnosis - Compact Version */}
+        <Card className="plant-card cursor-pointer" onClick={() => navigate('/diagnose')}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-agri-primary rounded-xl flex items-center justify-center">
+                  <Camera className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-text-secondary text-base mb-1">📸 Diagnose Crop Disease</h3>
+                  <p className="text-agri-gray text-sm">Upload Photo → Detect Disease</p>
+                  <div className="bg-agri-primary/10 text-agri-primary text-xs font-medium px-2 py-1 rounded-full inline-block mt-1">
+                    AI Powered
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-agri-gray" />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Soil & Fertilizer Cards */}
         <div className="space-y-4">
@@ -392,23 +401,6 @@ const Home = () => {
             </Card>
           </div>
         </div>
-
-        {/* Today's Farming Tip */}
-        <Card className="tip-card border-0">
-          <CardContent className="p-4">
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-amber-900 text-lg mb-1">Today's Farming Tip</h3>
-                <p className="text-amber-800 text-sm leading-relaxed">
-                  Early morning (6-8 AM) is optimal for pesticide application - calm winds reduce drift.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Bottom Navigation - 5 Tabs */}
